@@ -4,8 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "webpack-dev-server --progress --profile --colors --watch --config=build/webpack.dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "eago",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.8.5",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
+  }
 }

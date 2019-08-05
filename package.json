@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "cd server && npm install && cd ../static && npm install",
     "dev:server": "cd server && DEBUG=server:* npm start",
+    "dev:static": "cd static &&  npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +19,8 @@
     "url": "https://github.com/play-org/play-project/issues"
   },
   "homepage": "https://github.com/play-org/play-project#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "html-webpack-harddisk-plugin": "^1.0.1"
+  }
 }
