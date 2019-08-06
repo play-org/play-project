@@ -20,6 +20,10 @@ module.exports = {
     contentBase: varConfig.distDir,
     port: 3010
   },
+  resolve: {
+    modules: [path.resolve(__dirname, "src"), "node_modules"],
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".json"]
+  },
   module: {
     rules: [
       {
