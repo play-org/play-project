@@ -15,11 +15,29 @@ module.exports = {
     path: varConfig.distDir,
     publicPath: varConfig.cdnPrefix
   },
-
   devtool: "inline-source-map",
   devServer: {
     contentBase: varConfig.distDir,
     port: 3010
+  },
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: "less-loader"
+          }
+        ]
+      }
+    ]
   },
   plugins: [
     new CleanWebpackPlugin(),
