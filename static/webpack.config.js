@@ -2,28 +2,36 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const varConfig = require("../var/static.config.json");
 
+function resolve(p) {
+  return path.resolve(__dirname, p);
+}
 module.exports = {
   mode: "development",
-  entry: path.resolve(__dirname, "../src/module/index.js"),
+  entry: resolve("src/module/index.js"),
   output: {
     filename: "[index].bundle.js",
-    path: "/Users/eago/Projects/wyc_projects/play-project/var/static"
+    path: varConfig.distDir,
+    publicPath: varConfig.cdnPrefix
   },
+
   devtool: "inline-source-map",
   devServer: {
-    contentBase: "/Users/eago/Projects/wyc_projects/play-project/var/static",
-    port: 4000
+    contentBase: varConfig.distDir,
+    port: 3010
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template:
-        "/Users/eago/Projects/wyc_projects/play-project/static/src/template/index.html",
-      inject: true
+      template: resolve("src/template/index.html"),
+      inject: true,
+      alwaysWriteToDisk: true
     }),
     new HtmlWebpackHarddiskPlugin({
-      outputPath: "/Users/eago/Projects/wyc_projects/play-project/var/static"
+      outputPath: varConfig.distDir,
+      filename: "index.html",
+      alwaysWriteToDisk: true
     })
   ]
 };

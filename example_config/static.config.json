@@ -1,0 +1,4 @@
+{
+  "distDir": "app/var/static",
+  "cdnPrefix": "http://localhost:3010/static"
+}

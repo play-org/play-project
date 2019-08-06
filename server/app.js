@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../var/static")));
-
+console.log(path.join(__dirname, "../var/static"));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
