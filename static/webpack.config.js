@@ -9,7 +9,7 @@ function resolve(p) {
 }
 module.exports = {
   mode: "development",
-  entry: resolve("src/module/index.js"),
+  entry: resolve("src/module/app.tsx"),
   output: {
     filename: "[index].bundle.js",
     path: varConfig.distDir,
@@ -36,6 +36,10 @@ module.exports = {
             loader: "less-loader"
           }
         ]
+      },
+      {
+        test: /\.tsx?$/,
+        use: "babel-loader"
       }
     ]
   },

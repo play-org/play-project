@@ -1,7 +1,8 @@
+import React from "react";
 import ReactDOM from "react-dom";
-
+import "./app.less";
 function App() {
-  return <div>123</div>;
+  return <div>hello world!!!</div>;
 }
 
-ReactDOM.render(<App />, document.getElementById(".root"));
+ReactDOM.render(<App />, document.getElementById("root"));
