@@ -21,7 +21,9 @@
     "url": "https://github.com/play-org/play-project/issues"
   },
   "homepage": "https://github.com/play-org/play-project#readme",
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^3.5.3"
+  },
   "devDependencies": {
     "cross-env": "^5.2.0"
   }
