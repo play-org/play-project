@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --profile --colors --watch",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "eago",
@@ -20,12 +21,15 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
+    "file-loader": "^4.1.0",
     "html-webpack-harddisk-plugin": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.0.4",
+    "url-loader": "^2.1.0",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
