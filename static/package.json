@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --progress --profile --colors --watch",
     "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tslint": "tslint -p ."
   },
   "author": "eago",
   "license": "ISC",

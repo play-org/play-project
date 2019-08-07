@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "prettier": true,
+    "no-console": false,
+    "no-unused-expression": [true, "allow-new", "allow-fast-null-checks"],
+    "jsx-no-lambda": false,
+    "no-trailing-whitespace": true
+  }
+}
