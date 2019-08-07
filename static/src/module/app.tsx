@@ -1,9 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./app.less";
-import Header from "components/header/header";
-import Main from "components/main/main";
-import Footer from "components/footer/footer";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './app.less';
+import Header from 'components/header/header';
+import Main from 'components/main/main';
+import Footer from 'components/footer/footer';
 function App() {
   return (
     <div>
@@ -14,4 +14,4 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));

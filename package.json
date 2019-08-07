@@ -10,7 +10,8 @@
     "build:static": "cd static &&  cross-env NODE_ENV=production npm run build",
     "build:server": "cd static &&  cross-env NODE_ENV=production npm run build",
     "tslint": "cd server && npm run tslint && cd ../static && npm run tslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:prettier": "prettier --list-different \"**/*.{ts,tsx,js,jsx,json,css,less,yml,yaml,md}\"",
+    "fix:prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,less,yml,yaml,md}\""
   },
   "repository": {
     "type": "git",
@@ -41,5 +42,11 @@
       "pre-commit": "npm run tslint"
     }
   },
-  "lint-staged": {}
+  "lint-staged": {
+    "*.ts": [
+      "npm run tslint -- --fix",
+      "prettier --write",
+      "git add"
+    ]
+  }
 }
