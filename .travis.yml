@@ -13,10 +13,13 @@ before_install:
   - eval "$(ssh-agent -s)"
   - ssh-add ~/.ssh/deploy_rsa
   - echo -e "Host 106.53.64.5\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
 script:
   - npm run tslint || exit 1
+
 branches:
   only:
     - prod
+
 after_success:
   - ssh eago@106.53.64.5 'cd ~/ && git pull'
