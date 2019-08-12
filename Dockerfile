@@ -16,4 +16,4 @@ EXPOSE 3000
 ENV NODE_ENV=production PORT=3000
 
 # 使用pm2-docker启动程序
-CMD ["pm2-runtime", "server/dist/app.js"]
+CMD ["pm2-runtime", "server/dist/bin/www.js"]
