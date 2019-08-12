@@ -14,7 +14,7 @@ before_install:
   - echo -e "Host 106.53.64.5\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 script:
   - npm run tslint || exit 1
-deploy:
+branches:
   only:
     - prod
 after_success:
