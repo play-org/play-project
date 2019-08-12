@@ -1,4 +1,4 @@
 {
-  "distDir": "app/var/static",
+  "distDir": "/uar/app/var/static",
   "cdnPrefix": "http://localhost:3010/static"
 }

@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 const varConfig = require('../var/static.config.json');
 
 function resolve(p) {
@@ -11,14 +13,34 @@ function resolve(p) {
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  mode: 'development',
+  mode: isDev ? 'development' : 'production',
   entry: resolve('src/module/app.tsx'),
   output: {
     filename: `[name]${isDev ? '' : '.[contenthash:10]'}.js`,
     path: varConfig.distDir,
     publicPath: varConfig.cdnPrefix,
   },
-  devtool: 'inline-source-map',
+  devtool: isDev ? 'inline-source-map' : 'source-map',
+  // optimization: {
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       fooStyles: {
+  //         name: 'foo',
+  //         test: (m, c, entry = 'foo') =>
+  //           m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+  //         chunks: 'all',
+  //         enforce: true,
+  //       },
+  //       barStyles: {
+  //         name: 'bar',
+  //         test: (m, c, entry = 'bar') =>
+  //           m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+  //         chunks: 'all',
+  //         enforce: true,
+  //       },
+  //     },
+  //   },
+  // },
   devServer: {
     contentBase: varConfig.distDir,
     port: 3010,
@@ -124,6 +146,17 @@ module.exports = {
           new MiniCssExtractPlugin({
             filename: `[name].[contenthash:10].css`,
           }),
+          new OptimizeCSSAssetsPlugin({
+            cssProcessorOptions: {
+              map: {
+                // 不生成内联映射,这样配置就会生成一个source-map文件
+                inline: false,
+                // 向css文件添加source-map路径注释
+                // 如果没有此项压缩后的css会去除source-map路径注释
+                annotation: true,
+              },
+            },
+          }), //压缩css÷
         ]
   ),
 };
