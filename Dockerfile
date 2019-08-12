@@ -3,7 +3,7 @@ FROM node:10.16.2-slim
 
 WORKDIR /usr/app
 COPY . /usr/app/
-RUN npm i --unsafe-perm --production
+RUN npm i --unsafe-perm
 RUN npm run build:static
 RUN npm run build:server
 
