@@ -1,7 +1,4 @@
 version: '3'
 services:
-  static:
-    build: static/.
-
-  server:
-    build: server/.
+  webserver:
+    build: .
