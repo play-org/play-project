@@ -12,9 +12,7 @@ before_install:
   - chmod 600 ~/.ssh/deploy_rsa
   - echo -e "Host 106.53.64.5\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 script:
-  - npm i
-  - npm run build:static
-  - npm run build:server
+  - npm run tslint || exit 1
 deploy:
   only:
     - prod
