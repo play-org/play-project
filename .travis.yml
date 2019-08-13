@@ -22,4 +22,4 @@ branches:
     - prod
 
 after_success:
-  - ssh eago@106.53.64.5 'cd ~/play-project && git checkout prod && git pull'
+  - ssh eago@106.53.64.5 'cd ~/play-project && git checkout prod && git pull && docker-compose up --build'
