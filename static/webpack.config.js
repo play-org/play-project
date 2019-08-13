@@ -18,7 +18,7 @@ module.exports = {
   output: {
     filename: `[name]${isDev ? '' : '.[contenthash:10]'}.js`,
     path: varConfig.distDir,
-    publicPath: varConfig.cdnPrefix,
+    publicPath: varConfig.cdnPrefix || '/',
   },
   devtool: isDev ? 'inline-source-map' : 'source-map',
   optimization: {
