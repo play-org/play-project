@@ -1,0 +1,6 @@
+example_config
+node_modules
+README.md
+tslint.json
+.git
+.*

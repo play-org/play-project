@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
 const varConfig = require('../var/static.config.json');
 
 function resolve(p) {
@@ -21,29 +21,29 @@ module.exports = {
     publicPath: varConfig.cdnPrefix,
   },
   devtool: isDev ? 'inline-source-map' : 'source-map',
-  // optimization: {
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       fooStyles: {
-  //         name: 'foo',
-  //         test: (m, c, entry = 'foo') =>
-  //           m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
-  //         chunks: 'all',
-  //         enforce: true,
-  //       },
-  //       barStyles: {
-  //         name: 'bar',
-  //         test: (m, c, entry = 'bar') =>
-  //           m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
-  //         chunks: 'all',
-  //         enforce: true,
-  //       },
-  //     },
-  //   },
-  // },
+  optimization: {
+    // splitChunks: {
+    //   cacheGroups: {
+    //     fooStyles: {
+    //       name: 'foo',
+    //       test: (m, c, entry = 'foo') =>
+    //         m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+    //       chunks: 'all',
+    //       enforce: true,
+    //     },
+    //   },
+    // },
+    runtimeChunk: {
+      name: 'manifest',
+    },
+  },
   devServer: {
     contentBase: varConfig.distDir,
     port: 3010,
+  },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
@@ -139,6 +139,7 @@ module.exports = {
       filename: 'index.html',
       alwaysWriteToDisk: true,
     }),
+    new InlineManifestWebpackPlugin('manifest'),
   ].concat(
     isDev
       ? []
