@@ -4,8 +4,11 @@ FROM node:10.16.2-slim
 # 工作目录
 WORKDIR /usr/app
 
-# 安装模块
+# 安装pm2，并设置monitor
 RUN npm i -g pm2 --registry=https://registry.npm.taobao.org/
+ENV PM2_PUBLIC_KEY qml451ofm4amx23
+ENV PM2_SECRET_KEY h18qcwrelavfexy
+# 安装依赖包
 COPY package.json /usr/app/
 COPY static/package.json /usr/app/static/
 COPY server/package.json /usr/app/server/

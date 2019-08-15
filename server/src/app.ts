@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import indexRouter from './controllers/index';
 import compression from 'compression';
+
 var app = express();
 
 app.use(compression());
