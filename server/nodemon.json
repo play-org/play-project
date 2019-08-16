@@ -1,7 +1,7 @@
 {
   "verbose": true,
   "ext": "ts js",
-  "watch": ["server/src", "var/server.config.json", "var/static.config.json"],
+  "watch": ["src", "../var/server.config.json", "../var/static.config.json"],
   "ignore": ["node_modules", "dist"],
   "exec": "node -r ts-node/register --inspect=3005 src/bin/WWW",
   "env": {
