@@ -1,13 +1,14 @@
 import mysql from 'mysql';
-
-import serverConfig from '../../../var/server.config.json';
-
+import path from 'path';
+import fs from 'fs';
+const buf = fs.readFileSync(path.resolve(__dirname, '../../../var/server.config.json'));
+const serverConfig = JSON.parse(buf.toString());
 const options = Object.assign(
   {
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: '',
+    database: 'mysql',
     connectionLimit: 10,
   },
   serverConfig['mysql']

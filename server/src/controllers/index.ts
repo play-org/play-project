@@ -8,6 +8,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/users', async (req, res, next) => {
+  //
   const data = await db.table('t_users').select(['username', 'password']);
   res.json({ data });
 });
@@ -15,6 +16,7 @@ router.get('/users', async (req, res, next) => {
 router
   .route('/books')
   .get(async (req, res, next) => {
+    // hello
     const { id, title, author, pageNo, pageSize } = req.query;
     db.table('t_books');
     db.order_by('id', 'asc');
