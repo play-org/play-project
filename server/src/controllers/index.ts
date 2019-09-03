@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import db from '../utils/db';
 var router = express.Router();
-
 /* GET home page. */
 router.get('/', (req, res, next) => {
   res.render('index', { title: 'Express' });
@@ -52,4 +51,5 @@ router
       .delete();
     res.json(data);
   });
+
 export default router;

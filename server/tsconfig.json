@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "strictPropertyInitialization": true,
     "strictNullChecks": true,
-    "lib": ["es2017"],
+    "lib": ["es2017", "dom"],
     "resolveJsonModule": true
   },
   "include": ["src"],
