@@ -1,5 +1,6 @@
 import React, { useState, CSSProperties, useRef, useEffect, useReducer, useCallback } from 'react';
 import './main.less';
+import Test from '../test/test';
 
 const throttle = (func, delay) => {
   var timer = null;
@@ -107,8 +108,8 @@ export default function Main() {
       </div>
       <p>1</p>
       <p>1</p>
-
       <button onClick={handleCopy}>复制</button>
+      <Test />
     </main>
   );
 }

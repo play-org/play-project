@@ -72,7 +72,7 @@ module.exports = {
         test: /\.tsx?$/,
         use: 'babel-loader',
       },
-      // 处理图片（css background图片、img require图片）
+      // 处理图片（css background图片、imgs require图片）
       // 小于10k的图片，将会被转成base64 code
       {
         test: /\.(jpg|png|gif|svg)$/i,
