@@ -19,7 +19,7 @@ const throttle = (func, delay) => {
   };
 };
 
-export default function Main() {
+export default function Test() {
   const initialState = {
     left: 0,
     top: 0,

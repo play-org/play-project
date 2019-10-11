@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from 'components/header/header';
-import Main from 'components/main/main';
-import Footer from 'components/footer/footer';
+import Header from 'components/layout/header/header';
+import Main from 'components/layout/main/main';
+import Footer from 'components/layout/footer/footer';
 import './app.less';
 
 function App() {
