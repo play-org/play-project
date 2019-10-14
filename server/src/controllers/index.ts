@@ -2,12 +2,6 @@ import express, { Request, Response, NextFunction } from 'express';
 import db from '../utils/db';
 var router = express.Router();
 
-router.get('/users', async (req, res, next) => {
-  //
-  const data = await db.table('t_users').select(['username', 'password']);
-  res.json({ data });
-});
-
 router
   .route('/books')
   .get(async (req, res, next) => {

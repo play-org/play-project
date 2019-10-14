@@ -7,7 +7,8 @@
 * [x] docker-compose 启动镜像
 * [x] 连接 pm2 monitor 平台
 * [X] 多入口打包
-* [ ] redux 接入
+* [X] redux 接入，redux-thunk，redux-dev-tool
+* [x] server端routes
 * [ ] 工具库，request等
 * [ ] react-router 引入
 * [ ] css 校验 stylelint

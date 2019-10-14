@@ -1,23 +1,30 @@
-import express from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import siteRouter from './controllers/site';
-import indexRouter from './controllers/index';
-import transformRouter from './controllers/transform';
 import compression from 'compression';
-import * as config from './utils/config';
+import routes from './routes';
 
-const RUNTIME_ENV = config.load(path.resolve(__dirname, '../../var/server.config.json'))
-  .RUNTIME_ENV;
 const app = express();
-app.set('RUNTIME_ENV', RUNTIME_ENV);
 
 app.use(compression());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, '../../var/static')));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', path.resolve('../var/static'));
+
+// 设置路由
+for (const route in routes) {
+  const handle = (routes as Record<string, Router>)[route];
+  if (typeof handle !== 'function') continue;
+  app.use(route, handle);
+}
+
 // 跨域设置
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.get('Origin') || '*');
@@ -34,12 +41,5 @@ app.use(function(req, res, next) {
     return next();
   }
 });
-app.use(express.static(path.join(__dirname, '../../var/static')));
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.set('views', path.resolve('../var/static'));
-app.use('/', siteRouter);
-app.use('/api', indexRouter);
-app.use('/api/transform', transformRouter);
-
+// TODO: 错误处理
 module.exports = app;
