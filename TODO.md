@@ -6,6 +6,10 @@
 * [x] travis 持续集成
 * [x] docker-compose 启动镜像
 * [x] 连接 pm2 monitor 平台
+* [X] 多入口打包
+* [ ] redux 接入
+* [ ] 工具库，request等
+* [ ] react-router 引入
 * [ ] css 校验 stylelint
 * [ ] node logger
 * [ ] 前端性能监控
@@ -14,6 +18,4 @@
 * [ ] 域名隔离 api.wyc102989.top 等
 * [ ] 304 缓存实践，lru cache 了解
 * [ ] 服务端渲染
-* [ ] redux 接入
-* [ ] react-router 引入
 

@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import siteRouter from './controllers/site';
 import indexRouter from './controllers/index';
 import transformRouter from './controllers/transform';
 import compression from 'compression';
@@ -34,7 +35,11 @@ app.use(function(req, res, next) {
   }
 });
 app.use(express.static(path.join(__dirname, '../../var/static')));
-app.use('/', indexRouter);
-app.use('/transform', transformRouter);
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', path.resolve('../var/static'));
+app.use('/', siteRouter);
+app.use('/api', indexRouter);
+app.use('/api/transform', transformRouter);
 
 module.exports = app;
