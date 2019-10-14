@@ -14,7 +14,10 @@ const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   mode: isDev ? 'development' : 'production',
-  entry: resolve('src/module/app.tsx'),
+  entry: {
+    index: resolve('src/module/index/index.tsx'),
+    transform: resolve('src/module/transform/transform.tsx'),
+  },
   output: {
     filename: `[name]${isDev ? '' : '.[contenthash:10]'}.js`,
     path: varConfig.distDir,
@@ -22,17 +25,6 @@ module.exports = {
   },
   devtool: isDev ? 'inline-source-map' : 'source-map',
   optimization: {
-    // splitChunks: {
-    //   cacheGroups: {
-    //     fooStyles: {
-    //       name: 'foo',
-    //       test: (m, c, entry = 'foo') =>
-    //         m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
-    //       chunks: 'all',
-    //       enforce: true,
-    //     },
-    //   },
-    // },
     runtimeChunk: {
       name: 'manifest',
     },
@@ -131,13 +123,20 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: resolve('src/template/index.html'),
+      chunks: ['manifest', 'index'],
+      filename: 'index.html',
+      inject: true,
+      alwaysWriteToDisk: true,
+    }),
+    new HtmlWebpackPlugin({
+      template: resolve('src/template/transform.html'),
+      chunks: ['manifest', 'transform'],
+      filename: 'transform.html',
       inject: true,
       alwaysWriteToDisk: true,
     }),
     new HtmlWebpackHarddiskPlugin({
       outputPath: varConfig.distDir,
-      filename: 'index.html',
-      alwaysWriteToDisk: true,
     }),
     new InlineManifestWebpackPlugin('manifest'),
   ].concat(
