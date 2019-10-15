@@ -32,6 +32,7 @@ module.exports = {
   devServer: {
     contentBase: varConfig.distDir,
     port: 3010,
+    disableHostCheck: true,
   },
   externals: {
     react: 'React',

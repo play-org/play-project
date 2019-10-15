@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './main.less';
 import TestSvg from '../../test-svg/test-svg';
 import { useSelector, useDispatch, useStore, shallowEqual } from 'react-redux';
-import request from 'utils/request';
+import { get, post } from 'utils/request';
 export default function Main() {
+  const [UserInfo, setUserInfo] = useState({});
   const counter = useSelector((state: any) => state.counter);
-  console.log(counter.counter);
   console.log(useStore().getState());
   const dispatch = useDispatch();
   useEffect(() => {
-    function fetchUser() {
-      //TODO:
+    async function fetchUser() {
+      const res = await get('http://local.wyc102989.top:3000/api/user', null, {});
+      console.log(res.data[0]);
+      setUserInfo(res);
     }
-    // return () => {
-    //   cleanup;
-    // };
+    fetchUser();
   }, []);
   return (
     <main className="main">
@@ -23,6 +23,19 @@ export default function Main() {
       <button onClick={() => dispatch({ type: 'INCREMENT' })}>+</button>
       <button onClick={() => dispatch({ type: 'DECREMENT' })}>-</button>
       <TestSvg />
+      <button
+        onClick={() => {
+          async function login() {
+            post(
+              'http://local.wyc102989.top:3000/api/login',
+              { username: 'wyc', password: '123' },
+              {}
+            );
+          }
+          login();
+        }}>
+        登录
+      </button>
     </main>
   );
 }

@@ -1,5 +1,6 @@
-- [x] webpack 打包
+* [x] webpack 打
 
+* [ ]
 * [x] webpack 打包优化
 * [x] tslint 代码检查
 * [x] prettier 代码格式化
@@ -9,6 +10,8 @@
 * [X] 多入口打包
 * [X] redux 接入，redux-thunk，redux-dev-tool
 * [x] server端routes
+* [ ] express 中间件
+* [ ] express session 管理登录态
 * [ ] 工具库，request等
 * [ ] react-router 引入
 * [ ] css 校验 stylelint

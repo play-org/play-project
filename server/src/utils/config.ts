@@ -1,4 +1,3 @@
-import path from 'path';
 import fs from 'fs';
 function loadJSON(filename: string) {
   const content = fs.readFileSync(filename, 'utf8');

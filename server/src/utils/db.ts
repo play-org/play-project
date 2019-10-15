@@ -1,11 +1,10 @@
 import mysql from 'mysql';
 import path from 'path';
-import fs from 'fs';
-const buf = fs.readFileSync(path.resolve(__dirname, '../../../var/server.config.json'));
-const serverConfig = JSON.parse(buf.toString());
+import * as config from './config';
+const serverConfig = config.load(path.resolve(__dirname, '../../../var/server.config.json'));
 const options = Object.assign(
   {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'mysql',
@@ -13,6 +12,7 @@ const options = Object.assign(
   },
   serverConfig['mysql']
 );
+console.log(options);
 
 const pool = mysql.createPool(options);
 
@@ -225,7 +225,7 @@ class DB {
    * 查询方法
    * @param sql string
    */
-  query(sql: string) {
+  query(sql: string): Promise<any[]> {
     return new Promise(function(resolve, reject) {
       pool.query(sql, function(err, res, rows) {
         if (err) {
