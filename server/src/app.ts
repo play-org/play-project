@@ -1,17 +1,20 @@
 import express, { Router } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+import morgan from 'morgan';
 import compression from 'compression';
 import routes from './routes';
 import middlewares from './middlewares/middlewares';
 import * as redis from './utils/redis';
+import * as logger from './utils/logger';
+
 const app = express();
 
+logger.init();
 redis.init();
 
 app.use(compression());
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -20,7 +23,7 @@ app.use(express.static(path.join(__dirname, '../../var/static')));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 app.set('views', path.resolve('../var/static'));
-// use all middlewares
+// use all middlewares，before route
 for (const middleware of middlewares) {
   if (typeof middleware !== 'function') continue;
   app.use(middleware);

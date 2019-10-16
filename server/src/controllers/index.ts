@@ -1,5 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import db from '../utils/db';
+import log4js from 'log4js';
+
+const logger = log4js.getLogger('session');
+// sessionLogger.level = 'debug';
 var router = express.Router();
 
 router.post('/login', async (req, res) => {
@@ -12,12 +16,10 @@ router.post('/login', async (req, res) => {
       password,
     })
     .select(['id', 'username']);
-  console.log(req.session);
   if (req.session) {
-    console.log(1);
     req.session.userInfo = data[0];
+    logger.debug('userInfo:', data[0]);
   }
-  console.log(data[0]);
   res.json(data);
 });
 

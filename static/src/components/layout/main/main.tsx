@@ -6,12 +6,10 @@ import { get, post } from 'utils/request';
 export default function Main() {
   const [UserInfo, setUserInfo] = useState({});
   const counter = useSelector((state: any) => state.counter);
-  console.log(useStore().getState());
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchUser() {
       const res = await get('http://local.wyc102989.top:3000/api/user', null, {});
-      console.log(res.data[0]);
       setUserInfo(res);
     }
     fetchUser();

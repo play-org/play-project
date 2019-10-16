@@ -1,7 +1,11 @@
 import mysql from 'mysql';
 import path from 'path';
+import log4js, { Logger } from 'log4js';
 import * as config from './config';
+
+const logger = log4js.getLogger('db');
 const serverConfig = config.load(path.resolve(__dirname, '../../../var/server.config.json'));
+
 const options = Object.assign(
   {
     host: '127.0.0.1',
@@ -12,7 +16,6 @@ const options = Object.assign(
   },
   serverConfig['mysql']
 );
-console.log(options);
 
 const pool = mysql.createPool(options);
 
@@ -169,7 +172,7 @@ class DB {
     const keys = fields || ['*'];
 
     const sql = this._addExtra(`select ${keys.join(',')} from ${this.tb}`);
-    console.log(sql);
+    logger.debug('sql:');
     // 清除缓存
     this._clearSqlObj();
     return this.query(sql);
