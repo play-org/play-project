@@ -35,7 +35,13 @@ router.get('/', async (req, res) => {
    */
   await page.goto(getProtocolUrl(url), { waitUntil: 'load' });
   const html = await page.content();
-  const { msg_title, msg_desc, msg_cdn_url, create_time, appuin } = await page.$eval('html', () => {
+  const {
+    msg_title,
+    msg_desc,
+    msg_cdn_url,
+    create_time,
+    appuin,
+  } = await page.$eval('html', () => {
     return {
       msg_title: window.msg_title,
       msg_desc: window.msg_desc,

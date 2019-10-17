@@ -21,7 +21,14 @@ const cosObj = {
  * @param urls url数组
  */
 export async function uploadFiles(urls: string[]) {
-  const { bucket, bucketAppId, region, prefix, accessKey: secretId, secretKey } = cosObj;
+  const {
+    bucket,
+    bucketAppId,
+    region,
+    prefix,
+    accessKey: secretId,
+    secretKey,
+  } = cosObj;
   const cos = new COS({
     SecretId: secretId,
     SecretKey: secretKey,
@@ -47,7 +54,9 @@ export async function uploadFiles(urls: string[]) {
         .get(url)
         .on('response', function(res) {
           // 获取文件扩展名
-          ext = res.headers['content-type'] ? res.headers['content-type'].split('/')[1] : 'png';
+          ext = res.headers['content-type']
+            ? res.headers['content-type'].split('/')[1]
+            : 'png';
           // uuid 命名文件
           filename = `${uuid.v4()}.${ext}`;
           // 上传到腾讯cos
@@ -125,7 +134,9 @@ export function preProcess($: CheerioStatic, data: Record<string, any>) {
   $('.rich_media_inner').css('line-height', '1.6');
 
   // 替换发布日期
-  const publishDate = moment.unix(parseInt(data.createTime, 10)).format('YYYY-MM-DD');
+  const publishDate = moment
+    .unix(parseInt(data.createTime, 10))
+    .format('YYYY-MM-DD');
   $('#publish_time').text(`${publishDate}`);
 
   // 处理公众号跳转链接
@@ -171,7 +182,9 @@ export async function walkNodesAndFix($: CheerioStatic, selector: string) {
         // 处理腾讯视频
         if (el.tagName === 'iframe' && $(el).hasClass('video_iframe')) {
           const dealStyle = style && style.replace(/display: none;/g, '');
-          $(el).replaceWith(`<iframe style== "${dealStyle}" frameborder="0" src="${dataSrc}"/>`);
+          $(el).replaceWith(
+            `<iframe style== "${dealStyle}" frameborder="0" src="${dataSrc}"/>`
+          );
         } else {
           // 处理rem
           const dealStyle =
@@ -183,12 +196,18 @@ export async function walkNodesAndFix($: CheerioStatic, selector: string) {
 
           // 处理背景图片
           if (style && /url\("(.*?)"\)/.test(style)) {
-            backgroundImgSrcs.push(getProtocolUrl(style.match(/url\("(.*?)"\)/)![1]));
+            backgroundImgSrcs.push(
+              getProtocolUrl(style.match(/url\("(.*?)"\)/)![1])
+            );
             backgroundImgNodes.push($(el));
           }
 
           // 处理图片
-          if (el.tagName === 'img' && dataSrc && !dataSrc.includes('data:image')) {
+          if (
+            el.tagName === 'img' &&
+            dataSrc &&
+            !dataSrc.includes('data:image')
+          ) {
             imgSrcs.push(getProtocolUrl(dataSrc));
             imgNodes.push($(el));
           }

@@ -58,7 +58,10 @@ export default function Test() {
 
   // 鼠标按下，设置可拖拽，设置点击点到边界的距离
   const handleMouseDown = e => {
-    dispatch({ type: 'initClick', data: { left: e.pageX - pos.left, top: e.pageY - pos.top } });
+    dispatch({
+      type: 'initClick',
+      data: { left: e.pageX - pos.left, top: e.pageY - pos.top },
+    });
     setDragging(true);
   };
 

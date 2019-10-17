@@ -9,7 +9,11 @@ export default function Main() {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchUser() {
-      const res = await get('http://local.wyc102989.top:3000/api/user', null, {});
+      const res = await get(
+        'http://local.wyc102989.top:3000/api/user',
+        null,
+        {}
+      );
       setUserInfo(res);
     }
     fetchUser();

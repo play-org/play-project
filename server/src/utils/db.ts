@@ -4,7 +4,9 @@ import log4js, { Logger } from 'log4js';
 import * as config from './config';
 
 const logger = log4js.getLogger('db');
-const serverConfig = config.load(path.resolve(__dirname, '../../../var/server.config.json'));
+const serverConfig = config.load(
+  path.resolve(__dirname, '../../../var/server.config.json')
+);
 
 const options = Object.assign(
   {
