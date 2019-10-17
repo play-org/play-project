@@ -5,7 +5,14 @@
 import * as qs from './query-string';
 import { isString } from './check-types';
 
-export type RequestMethod = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
+export type RequestMethod =
+  | 'GET'
+  | 'HEAD'
+  | 'POST'
+  | 'PUT'
+  | 'PATCH'
+  | 'DELETE'
+  | 'OPTIONS';
 
 export type RequestHeaders = Record<string, string>;
 
@@ -185,7 +192,8 @@ class Request {
   private createFetchTimeout() {
     return new Promise((resolve, reject) => {
       this.fetchTimeoutTimer = window.setTimeout(() => {
-        reject('fetch 超时');
+        const err = getFetchError('TIMEOUT');
+        reject(err);
       }, this.timeout);
     });
   }
@@ -194,7 +202,8 @@ class Request {
     let abort: () => void;
     const abortPromise = new Promise((resolve, reject) => {
       abort = () => {
-        reject('fetch abort');
+        const err = getFetchError('ABORT');
+        reject(err);
       };
     });
     return { abortPromise, abort };
@@ -207,7 +216,8 @@ class Request {
       const result = await this.parseFetchData(res);
 
       if ((status < 200 || status > 300) && status !== 304) {
-        reject();
+        const err = getFetchError('ERROR');
+        reject(err);
       } else {
         resolve(result);
       }
@@ -273,7 +283,10 @@ class Request {
 
     return promise;
   }
-  private onXHRLoad(resolve: (value?: any) => void, reject: (reason?: any) => void) {
+  private onXHRLoad(
+    resolve: (value?: any) => void,
+    reject: (reason?: any) => void
+  ) {
     return () => {
       if (!this.xhr) return;
       const xhr = this.xhr;
@@ -288,7 +301,8 @@ class Request {
         const status = xhr.status;
         // <200 || >=300 异常 http status，抛出错误
         if (status < 200 || (status >= 300 && status !== 304)) {
-          reject();
+          const err = getFetchError('ERROR');
+          reject(err);
         } else {
           resolve(result);
         }
@@ -296,23 +310,27 @@ class Request {
     };
   }
 
-  private onXHRError(reject: (reason?: string) => void) {
+  private onXHRError(reject: (reason?: any) => void) {
     return () => {
-      reject();
+      const err = getFetchError('ERROR');
+      reject(err);
       this.finallyXHR();
     };
   }
 
   private onXHRAbort(reject: (reason?: any) => void) {
     return () => {
-      reject('xhr abort');
+      const err = getFetchError('ABORT');
+      reject(err);
       this.finallyXHR();
     };
   }
 
   private onXHRTimeout(reject: (reason?: any) => void) {
     return () => {
-      reject('xhr超时');
+      const err = getFetchError('TIMEOUT');
+
+      reject(err);
       this.finallyXHR();
     };
   }
@@ -342,12 +360,12 @@ function head(url: string, data?: any, options: RequestOptions = {}) {
   return request(url, data, options);
 }
 // get
-function get(url: string, data, options: RequestOptions) {
+function get(url: string, data, options: RequestOptions = {}) {
   options.method = 'GET';
   return request(url, data, options);
 }
 // post
-function post(url: string, data, options: RequestOptions) {
+function post(url: string, data, options: RequestOptions = {}) {
   options.method = 'POST';
   return request(url, data, options);
 }
@@ -371,5 +389,54 @@ function options(url: string, options: RequestOptions = {}) {
   options.method = 'OPTIONS';
   return request(url, null, options);
 }
+
+const REQUEST_STATUS = {
+  SUCCESS: 200,
+  MULTIPLE_CHOICES: 300,
+  NOT_MODIFY: 304,
+  ABORT: 400,
+  ERROR: 500,
+  TIMEOUT: 504,
+};
+
+const REQUEST_CODE = {
+  SUCCESS: 200,
+  ABORT: 1000,
+  TIMEOUT: 1001,
+  ERROR: 1002,
+};
+
+const REQUEST_MSG = {
+  TIMEOUT: '请求超时',
+  ERROR: '未知错误',
+  ABORT: '请求被取消',
+};
+
+export class FetchError extends Error {
+  private status: number = REQUEST_STATUS.SUCCESS;
+  private code: string | number = REQUEST_CODE.SUCCESS;
+  stack: string | null = null;
+  constructor(
+    code: string | number,
+    status: number,
+    msg: string,
+    stack?: string | null
+  ) {
+    super(msg);
+    this.code = code;
+    this.status = status;
+    if (stack) this.stack = stack;
+  }
+}
+
+function getFetchError(type: 'ERROR' | 'TIMEOUT' | 'ABORT') {
+  return new FetchError(
+    REQUEST_CODE[type],
+    REQUEST_STATUS[type],
+    REQUEST_MSG[type]
+  );
+}
+
 export { get, head, options, post, put, patch, del };
+
 export default request;

@@ -9,11 +9,7 @@ export default function Main() {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchUser() {
-      const res = await get(
-        'http://local.wyc102989.top:3000/api/user',
-        null,
-        {}
-      );
+      const res = await get('/api/user', null, {});
       setUserInfo(res);
     }
     fetchUser();
@@ -28,11 +24,10 @@ export default function Main() {
       <button
         onClick={() => {
           async function login() {
-            const userInfo = await post(
-              'http://local.wyc102989.top:3000/api/login',
-              { username: 'wyc', password: '123' },
-              { timeout: 100 }
-            );
+            const userInfo = await post('/api/login', {
+              username: 'wyc',
+              password: '123',
+            });
             console.log(userInfo);
           }
           login();
