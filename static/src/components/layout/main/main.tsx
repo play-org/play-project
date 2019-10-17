@@ -24,11 +24,12 @@ export default function Main() {
       <button
         onClick={() => {
           async function login() {
-            post(
+            const userInfo = await post(
               'http://local.wyc102989.top:3000/api/login',
               { username: 'wyc', password: '123' },
-              {}
+              { timeout: 100 }
             );
+            console.log(userInfo);
           }
           login();
         }}>
