@@ -7,7 +7,8 @@ import routes from './routes';
 import middlewares from './middlewares/middlewares';
 import * as redis from './utils/redis';
 import * as logger from './utils/logger';
-
+import notFoundMiddleware from './middlewares/404';
+import errorMiddlleware from './middlewares/error';
 const app = express();
 
 logger.init();
@@ -34,6 +35,9 @@ for (const route in routes) {
   if (typeof handle !== 'function') continue;
   app.use(route, handle);
 }
+// 错误处理
+app.use(notFoundMiddleware);
+app.use(errorMiddlleware);
 
 // 跨域设置
 app.use(function(req, res, next) {
@@ -47,11 +51,10 @@ app.use(function(req, res, next) {
   );
 
   // TODO: options请求，直接返回200（这样处理应该不对）
-  if (req.method === 'OPTIONS') {
-    return res.send(200);
-  } else {
-    return next();
-  }
+  // if (req.method === 'OPTIONS') {
+  //   return res.send(200);
+  // } else {
+  //   return next();
+  // }
 });
-// TODO: 错误处理
 module.exports = app;

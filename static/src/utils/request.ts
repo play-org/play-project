@@ -360,22 +360,22 @@ function head(url: string, data?: any, options: RequestOptions = {}) {
   return request(url, data, options);
 }
 // get
-function get(url: string, data, options: RequestOptions = {}) {
+function get(url: string, data?: any, options: RequestOptions = {}) {
   options.method = 'GET';
   return request(url, data, options);
 }
 // post
-function post(url: string, data, options: RequestOptions = {}) {
+function post(url: string, data?: any, options: RequestOptions = {}) {
   options.method = 'POST';
   return request(url, data, options);
 }
 // put
-function put(url: string, data: any, options: RequestOptions = {}) {
+function put(url: string, data?: any, options: RequestOptions = {}) {
   options.method = 'PUT';
   return request(url, data, options);
 }
 // patch
-function patch(url: string, data: any, options: RequestOptions = {}) {
+function patch(url: string, data?: any, options: RequestOptions = {}) {
   options.method = 'PATCH';
   return request(url, data, options);
 }

@@ -22,15 +22,15 @@ const options = Object.assign(
 const pool = mysql.createPool(options);
 
 class DB {
-  tb: string;
+  tableName: string;
   sqlObj: Record<string, any>;
   constructor() {
-    this.tb = '';
+    this.tableName = '';
     this.sqlObj = {};
   }
   table(table: string) {
-    this.sqlObj = {};
-    this.tb = table;
+    // this.sqlObj = {};
+    this.tableName = table;
     return this;
   }
   // 搜索
@@ -138,7 +138,7 @@ class DB {
     this.sqlObj.limit = offset ? ` limit ${offset},${num}` : ` limit ${num}`;
     return this;
   }
-  page(pageNo: number, pageSize: number) {
+  page(pageNo: number = 1, pageSize: number = 10) {
     return this.limit(pageSize, (pageNo - 1) * pageSize);
   }
   /**
@@ -146,11 +146,17 @@ class DB {
    * @param isClear 是否清楚缓存，默认true
    */
   async count_all_results(isClear: boolean = true) {
-    const sql = this._addExtra(`select count(*) as total from ${this.tb}`);
+    const sql = this._addExtra(
+      `select count(*) as total from ${this.tableName}`
+    );
     // 清除缓存
     isClear && this._clearSqlObj();
-    const res = (await this.query(sql)) as Array<Record<string, any>>;
-    return res[0]['total'];
+    try {
+      const res = (await this.query(sql)) as Array<Record<string, any>>;
+      return res[0]['total'];
+    } catch (e) {
+      throw e;
+    }
   }
   /**
    * 排序
@@ -171,13 +177,40 @@ class DB {
    * @param fields 字段
    */
   select(fields?: string[]) {
-    const keys = fields || ['*'];
-
-    const sql = this._addExtra(`select ${keys.join(',')} from ${this.tb}`);
-    logger.debug('sql:');
+    this.sqlObj.fields = fields || ['*'];
+    return this;
+  }
+  async findOne() {
+    const sql = this._addExtra(
+      `select ${this.sqlObj.fields.join(',')} from ${this.tableName}`
+    );
+    logger.debug('sql:', sql);
     // 清除缓存
     this._clearSqlObj();
-    return this.query(sql);
+    try {
+      const result = await this.query(sql);
+
+      logger.debug('sql result', result);
+      return result[0];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async findAll() {
+    const sql = this._addExtra(
+      `select ${this.sqlObj.fields.join(',')} from ${this.tableName}`
+    );
+    logger.debug('sql:', sql);
+    // 清除缓存
+    this._clearSqlObj();
+    try {
+      const result = await this.query(sql);
+      logger.debug('sql result', result);
+      return result;
+    } catch (e) {
+      throw e;
+    }
   }
   /**
    * 插入
@@ -187,9 +220,17 @@ class DB {
     const keys = Object.keys(data);
     const values = pool.escape([Object.values(data)]);
 
-    const sql = `insert into ${this.tb} (${keys.join(',')}) values ${values}`;
+    const sql = `insert into ${this.tableName} (${keys.join(
+      ','
+    )}) values ${values}`;
     this._clearSqlObj();
-    return this.query(sql);
+    return this.query(sql)
+      .then(res => {
+        return res;
+      })
+      .catch(e => {
+        throw e;
+      });
   }
   /**
    * 批量插入
@@ -203,9 +244,17 @@ class DB {
       })
       .join(',');
 
-    const sql = `insert into ${this.tb} (${keys.join(',')}) values ${values}`;
+    const sql = `insert into ${this.tableName} (${keys.join(
+      ','
+    )}) values ${values}`;
     this._clearSqlObj();
-    return this.query(sql);
+    return this.query(sql)
+      .then(res => {
+        return res;
+      })
+      .catch(e => {
+        throw e;
+      });
   }
   /**
    * 更新
@@ -213,18 +262,30 @@ class DB {
    */
   update(data: Record<string, any>) {
     const strUpdate = pool.escape(data);
-    const sql = this._addExtra(`update ${this.tb} set ${strUpdate}`);
+    const sql = this._addExtra(`update ${this.tableName} set ${strUpdate}`);
     this._clearSqlObj();
-    return this.query(sql);
+    return this.query(sql)
+      .then(res => {
+        return res;
+      })
+      .catch(e => {
+        throw e;
+      });
   }
   /**
    * 删除操作
    */
   delete() {
-    const sql = this._addExtra(`delete from ${this.tb}`);
+    const sql = this._addExtra(`delete from ${this.tableName}`);
 
     this._clearSqlObj();
-    return this.query(sql);
+    return this.query(sql)
+      .then(res => {
+        return res;
+      })
+      .catch(e => {
+        throw e;
+      });
   }
   /**
    * 查询方法

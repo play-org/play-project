@@ -3,7 +3,7 @@ import db from '../utils/db';
 var router = express.Router();
 
 router
-  .route('/book')
+  .route('/')
   .get(async (req, res, next) => {
     // hello
     const { id, title, author, pageNo, pageSize } = req.query;
@@ -13,7 +13,7 @@ router
     if (title) db.like({ title: `${title}%` });
     const total = await db.count_all_results(false);
     db.page(pageNo, pageSize);
-    const data = await db.select(['author', 'title']);
+    const data = await db.select(['author', 'title']).findAll();
     res.json({ data, total });
   })
   .put(async (req, res, next) => {

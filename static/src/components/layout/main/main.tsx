@@ -34,6 +34,16 @@ export default function Main() {
         }}>
         登录
       </button>
+      <button
+        onClick={() => {
+          async function login() {
+            const books = await get('/api/book');
+            console.log(books);
+          }
+          login();
+        }}>
+        查询所有书
+      </button>
     </main>
   );
 }
