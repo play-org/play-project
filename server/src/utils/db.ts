@@ -1,10 +1,10 @@
 import mysql from 'mysql';
-import path from 'path';
-import log4js, { Logger } from 'log4js';
+import log4js from 'log4js';
 import * as config from './config';
 
 const logger = log4js.getLogger('db');
 const mysqlConf = config.get('mysql');
+logger.debug('aaa', mysqlConf);
 
 const options = Object.assign(
   {

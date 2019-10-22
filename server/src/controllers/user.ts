@@ -7,8 +7,11 @@ const router = express.Router();
 router.get(
   '/',
   catchError(async (req, res, next) => {
-    const data = await db.table('t_users').select(['username', 'password']);
-    response.json(res, { data });
+    const data = await db
+      .select(['username', 'password'])
+      .table('t_users')
+      .findAll();
+    response.json(res, data);
   })
 );
 

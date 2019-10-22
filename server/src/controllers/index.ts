@@ -1,8 +1,9 @@
 import express from 'express';
-import db from '../utils/db';
 import log4js from 'log4js';
 import { catchError } from '../utils/error';
+import db from '../utils/db';
 import * as response from '../utils/response';
+
 const logger = log4js.getLogger('session');
 // sessionLogger.level = 'debug';
 var router = express.Router();
