@@ -4,9 +4,7 @@ import log4js, { Logger } from 'log4js';
 import * as config from './config';
 
 const logger = log4js.getLogger('db');
-const serverConfig = config.load(
-  path.resolve(__dirname, '../../../var/server.config.json')
-);
+const mysqlConf = config.get('mysql');
 
 const options = Object.assign(
   {
@@ -16,7 +14,7 @@ const options = Object.assign(
     database: 'mysql',
     connectionLimit: 10,
   },
-  serverConfig['mysql']
+  mysqlConf
 );
 
 const pool = mysql.createPool(options);

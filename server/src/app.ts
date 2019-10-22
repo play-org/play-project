@@ -5,14 +5,22 @@ import morgan from 'morgan';
 import compression from 'compression';
 import routes from './routes';
 import middlewares from './middlewares/middlewares';
-import * as redis from './utils/redis';
-import * as logger from './utils/logger';
 import notFoundMiddleware from './middlewares/404';
 import errorMiddlleware from './middlewares/error';
+import * as redis from './utils/redis';
+import * as logger from './utils/logger';
+import * as config from './utils/config';
 const app = express();
 
 logger.init();
 redis.init();
+// 加载配置
+config.load(
+  path.resolve(__dirname, '../../var/server.config.json'),
+  path.resolve(__dirname, '../../var/static.config.json'),
+  path.resolve(__dirname, '../../package.json'),
+  path.resolve(__dirname, '../../config.json')
+);
 
 app.use(compression());
 app.use(morgan('dev'));
