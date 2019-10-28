@@ -8,5 +8,13 @@ import React, {
 import './header.less';
 
 export default function Header() {
-  return <header>header</header>;
+  return (
+    <header className="g-header">
+      <ul>
+        <li>首页</li>
+        <li>测试1</li>
+        <li>测试2</li>
+      </ul>
+    </header>
+  );
 }

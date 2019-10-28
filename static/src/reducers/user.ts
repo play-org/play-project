@@ -8,6 +8,8 @@ const initState = {
 export default function user(state = initState, action) {
   switch (action.type) {
     case ACTIONS.SET_USER_INFO:
-      return;
+      return { ...state, ...action.payload };
+    default:
+      return state;
   }
 }
