@@ -1,9 +1,31 @@
 {
+  "RUNTIME_ENV": "dev",
   "mysql": {
     "host": "172.16.41.210",
     "user": "root",
     "password": "root",
     "database": "play_project",
     "connectionLimit": 10
+  },
+  "session": {
+    "secret": "Ox8kEJN7G3rvH7xq",
+    "name": "testeago.sid",
+    "rolling": true,
+    "resave": false,
+    "saveUninitialized": true,
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "secure": false,
+      "maxAge": 86400000,
+      "domain": ".wyc102989.top"
+    },
+    "store": {
+      "host": "172.16.41.210",
+      "pass": "",
+      "port": 6379,
+      "db": 0,
+      "prefix": "eago:session:"
+    }
   }
 }

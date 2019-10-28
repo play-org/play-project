@@ -15,8 +15,8 @@ const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
   mode: isDev ? 'development' : 'production',
   entry: {
-    index: resolve('src/module/index/index.tsx'),
-    transform: resolve('src/module/transform/transform.tsx'),
+    index: resolve('src/modules/index/index.tsx'),
+    transform: resolve('src/modules/transform/transform.tsx'),
   },
   output: {
     filename: `[name]${isDev ? '' : '.[contenthash:10]'}.js`,

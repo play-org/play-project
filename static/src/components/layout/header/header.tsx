@@ -1,19 +1,20 @@
-import React, {
-  useState,
-  useRef,
-  useReducer,
-  useCallback,
-  useEffect,
-} from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './header.less';
 
 export default function Header() {
   return (
     <header className="g-header">
       <ul>
-        <li>首页</li>
-        <li>测试1</li>
-        <li>测试2</li>
+        <li>
+          <Link to="/">首页</Link>
+        </li>
+        <li>
+          <Link to="/test">测试</Link>
+        </li>
+        <li>
+          <Link to="/profile">个人中心</Link>
+        </li>
       </ul>
     </header>
   );

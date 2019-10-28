@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import './main.less';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import TestSvg from '../../test-svg/test-svg';
-import { useSelector, useDispatch, useStore, shallowEqual } from 'react-redux';
 import Profile from '../../profile/profile';
+import Home from '../../home/home';
+import './main.less';
+
 export default function Main() {
   return (
     <main className="main">
-      <Profile />
-      <TestSvg />
+      <Switch>
+        <Route exact={true} path="/">
+          <Home />
+        </Route>
+        <Route path="/test">
+          <TestSvg />
+        </Route>
+        <Route path="/profile">
+          <Profile />
+        </Route>
+      </Switch>
     </main>
   );
 }

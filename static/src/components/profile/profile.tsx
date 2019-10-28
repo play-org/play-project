@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch, useStore, shallowEqual } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { login as loginAction } from 'actions/user';
+
 export default function Main() {
   const userInfo = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <section className="">
@@ -13,6 +16,12 @@ export default function Main() {
           dispatch(loginAction('wyc', '123'));
         }}>
         登录
+      </button>
+      <button
+        onClick={() => {
+          history.push('/');
+        }}>
+        回到首页
       </button>
     </section>
   );
