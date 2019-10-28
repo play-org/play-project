@@ -7,8 +7,10 @@ const router = express.Router();
 router.get(
   '/',
   catchError(async (req, res, next) => {
-    // 获取用户嘻嘻
-    const data = await db.table('t_users').select(['username', 'password']);
+    const data = await db
+      .select(['username', 'password'])
+      .table('t_users')
+      .findAll();
     response.json(res, data);
   })
 );
