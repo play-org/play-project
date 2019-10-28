@@ -1,11 +1,16 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import db from '../utils/db';
-var router = express.Router();
+import { catchError } from '../utils/error';
+import * as response from '../utils/response';
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  //
-  const data = await db.table('t_users').select(['username', 'password']);
-  res.json({ data });
-});
+router.get(
+  '/',
+  catchError(async (req, res, next) => {
+    // 获取用户嘻嘻
+    const data = await db.table('t_users').select(['username', 'password']);
+    response.json(res, data);
+  })
+);
 
 export default router;

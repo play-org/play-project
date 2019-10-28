@@ -1,10 +1,8 @@
 import express from 'express';
 import db from '../utils/db';
 import log4js from 'log4js';
-import { catchError, ServiceError } from '../utils/error';
-import SERVICE_CODE from '../constants/service-code';
-import ERROR_CODE from '../constants/error-code';
-
+import { catchError } from '../utils/error';
+import * as response from '../utils/response';
 const logger = log4js.getLogger('session');
 // sessionLogger.level = 'debug';
 var router = express.Router();
@@ -25,13 +23,7 @@ router.post(
       req.session.userInfo = data[0];
       logger.debug('userInfo:', data[0]);
     }
-    throw new ServiceError(
-      SERVICE_CODE.API,
-      ERROR_CODE.BAD_REQUEST,
-      '登录参数不对'
-    );
-
-    res.json(data);
+    response.json(res, data);
   })
 );
 
