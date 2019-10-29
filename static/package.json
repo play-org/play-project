@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@types/classnames": "^2.2.9",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",
     "@types/react-redux": "^7.1.4",
@@ -25,6 +26,7 @@
     "@babel/preset-typescript": "^7.3.3",
     "@babel/runtime": "^7.6.3",
     "babel-loader": "^8.0.6",
+    "classnames": "^2.2.6",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.2.0",
     "css-loader": "^3.1.0",

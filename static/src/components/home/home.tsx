@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getPostList } from 'apis/post';
-import { post } from 'utils/request';
+import List, { IPostList } from './list/list';
+
 export default function Home() {
-  const [postList, setPostList] = useState<Record<string, any>>({});
+  const [postList, setPostList] = useState<IPostList>({});
   useEffect(() => {
     async function fetchPost() {
       const data = await getPostList();
@@ -10,23 +11,12 @@ export default function Home() {
     }
     fetchPost();
     return () => {
-      setPostList([]);
+      setPostList({});
     };
   }, []);
   return (
     <section>
-      <h2>共{postList.total}条记录</h2>
-      <p>
-        {postList.list &&
-          postList.list.map(item => {
-            return (
-              <div key={item.id}>
-                <h3>{item.title}</h3>
-                <p>- {item.content}</p>
-              </div>
-            );
-          })}
-      </p>
+      <List listData={postList} />
     </section>
   );
 }
