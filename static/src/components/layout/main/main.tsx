@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import TestSvg from '../../test-svg/test-svg';
 import Profile from '../../profile/profile';
 import Home from '../../home/home';
+
 import './main.less';
 
 export default function Main() {
   return (
-    <main className="main">
+    <main className="g-main">
       <Switch>
         <Route exact={true} path="/">
           <Home />

@@ -85,10 +85,10 @@ class Request {
   // 将 get, head 请求的数据拼接到 url
   resolveUrl(url: string, data: any) {
     if (this.isQuery() && data) {
-      if (isString(url)) {
+      if (isString(data)) {
         url += /^\?/.test(data) ? data : `?${data}`;
       } else {
-        url += qs.stringify(data);
+        url += `?${qs.stringify(data)}`;
       }
     }
     return url;
@@ -219,7 +219,7 @@ class Request {
         const err = getFetchError('ERROR');
         reject(err);
       } else {
-        resolve(result);
+        resolve(this.parseResponse(result));
       }
     });
   }
@@ -304,7 +304,7 @@ class Request {
           const err = getFetchError('ERROR');
           reject(err);
         } else {
-          resolve(result);
+          resolve(this.parseResponse(result));
         }
       }
     };
@@ -340,6 +340,15 @@ class Request {
     // 释放 xhr
     this.xhr.ontimeout = this.xhr.onload = this.xhr.onerror = this.xhr.onabort = null;
     this.xhr = null;
+  }
+
+  parseResponse(result) {
+    if (this.headers['Accept'] === CONTENT_TYPE.JSON) {
+      if (result.hasOwnProperty('success')) {
+        return result.data;
+      }
+    }
+    return result;
   }
 }
 
@@ -412,6 +421,9 @@ const REQUEST_MSG = {
   ABORT: '请求被取消',
 };
 
+/**
+ * FetchError类
+ */
 export class FetchError extends Error {
   private status: number = REQUEST_STATUS.SUCCESS;
   private code: string | number = REQUEST_CODE.SUCCESS;
@@ -429,6 +441,10 @@ export class FetchError extends Error {
   }
 }
 
+/**
+ * 获取Error对象
+ * @param type error类型
+ */
 function getFetchError(type: 'ERROR' | 'TIMEOUT' | 'ABORT') {
   return new FetchError(
     REQUEST_CODE[type],

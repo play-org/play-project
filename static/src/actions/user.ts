@@ -4,7 +4,7 @@ import ACTIONS from 'constants/actions';
 
 export function login(username, password) {
   return async (dispatch: Dispatch<any>) => {
-    const { data } = await loginApi(username, password);
+    const data = await loginApi(username, password);
     dispatch(setUserInfo(data));
   };
 }

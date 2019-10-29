@@ -4,4 +4,4 @@ const isAnything = type => {
 
 export const isString = isAnything('[object String]');
 
-export const isObject = isAnything('[object Object');
+export const isObject = isAnything('[object Object]');
