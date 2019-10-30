@@ -14,7 +14,9 @@ router
 
       const total = await db.count_all_results(false);
       db.page(pageNo, pageSize);
-      const list = await db.select().findAll();
+      const list = await db
+        .select(['id', 'title', 'like_num', 'comment_num'])
+        .findAll();
       response.json(res, { list, total });
     })
   )
@@ -49,5 +51,46 @@ router
       response.json(res, data);
     })
   );
+
+router.get(
+  '/:id',
+  catchError(async (req, res, next) => {
+    const id = req.params.id;
+
+    const { author_id, tags, categories, ...rest } = await db
+      .select()
+      .table('t_posts')
+      .where({ id })
+      .findOne();
+
+    const p_user = db
+      .select(['username', 'avatar'])
+      .table('t_users')
+      .where({ id: author_id })
+      .findOne();
+    const p_tag = db
+      .select()
+      .table('t_tags')
+      .where_in('id', tags.split(','))
+      .findAll();
+    const p_category = db
+      .select()
+      .table('t_categories')
+      .where_in('id', categories.split(','))
+      .findAll();
+
+    const [userInfo, tagInfo, categoryInfo] = await Promise.all([
+      p_user,
+      p_tag,
+      p_category,
+    ]);
+    response.json(res, {
+      ...rest,
+      ...userInfo,
+      tags: tagInfo,
+      categories: categoryInfo,
+    });
+  })
+);
 
 export default router;
