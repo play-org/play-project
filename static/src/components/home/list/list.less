@@ -1,0 +1,29 @@
+.post-list {
+  max-width: 700px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  .post-item {
+    padding: 24px 18px;
+    border-bottom: 1px solid rgba(178, 186, 194, 0.15);
+    cursor: pointer;
+    .opt-bar {
+      .opt-item {
+        padding: 2px 12px;
+        color: #b2bac2;
+        border-radius: 1px;
+        border: 1px solid #edeeef;
+        font-size: 14px;
+        i {
+          margin-right: 2px;
+          font-size: 14px;
+        }
+      }
+      .opt-item:not(:first-child) {
+        margin-left: -1px;
+      }
+      .opt-item:hover {
+        cursor: pointer;
+        background-color: #f7f8fa;
+      }
+    }
+  }
+}
