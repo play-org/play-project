@@ -56,23 +56,25 @@ router.get(
   '/:id',
   catchError(async (req, res, next) => {
     const id = req.params.id;
-
+    // 查询帖子
     const { author_id, tags, categories, ...rest } = await db
       .select()
       .table('t_posts')
       .where({ id })
       .findOne();
-
+    // 查询扩展表
     const p_user = db
       .select(['username', 'avatar'])
       .table('t_users')
       .where({ id: author_id })
       .findOne();
+
     const p_tag = db
       .select()
       .table('t_tags')
       .where_in('id', tags.split(','))
       .findAll();
+
     const p_category = db
       .select()
       .table('t_categories')
@@ -84,6 +86,11 @@ router.get(
       p_tag,
       p_category,
     ]);
+    // 生成阅读数
+    db.table('t_posts')
+      .where({ id })
+      .update({ read_num: rest.read_num + 1 });
+
     response.json(res, {
       ...rest,
       ...userInfo,

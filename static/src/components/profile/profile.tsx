@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { login as loginAction } from 'actions/user';
+import { Component } from 'react';
 
 export default function Main() {
   const userInfo = useSelector((state: any) => state.user);
@@ -11,6 +12,7 @@ export default function Main() {
   return (
     <section className="">
       <div>{userInfo && userInfo.username}</div>
+
       <button
         onClick={() => {
           dispatch(loginAction('wyc', '123'));

@@ -3,9 +3,8 @@ import './footer.less';
 
 export default function Footer() {
   return (
-    <footer>
-      footer
-      <div>aaa</div>
+    <footer className="g-footer">
+      typescript + react + redux + react-router + express
     </footer>
   );
 }
