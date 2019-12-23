@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-import app from '../app';
 import http from 'http';
+import url from 'url';
+import app from '../app';
+import createWs from '../ws';
+import sessionParser from '../middlewares/session';
 
 var debug = require('debug')('server:server');
 
@@ -22,6 +21,24 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+const wss = createWs();
+
+/**
+ * upgrade protocol
+ */
+server.on('upgrade', function(req, socket, head) {
+  const pathname = url.parse(req.url).pathname;
+  sessionParser(req, {} as any, () => {
+    if (pathname == '/chat') {
+      wss.handleUpgrade(req, socket, head, function(ws) {
+        wss.emit('connection', ws, req);
+      });
+    } else {
+      socket.destroy();
+      return;
+    }
+  });
+});
 /**
  * Listen on provided port, on all network interfaces.
  */

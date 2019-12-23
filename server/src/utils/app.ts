@@ -7,13 +7,12 @@ import routes from '../routes';
 import middlewares from '../middlewares/middlewares';
 import notFoundMiddleware from '../middlewares/404';
 import errorMiddlleware from '../middlewares/error';
-import * as redis from './redis';
 import * as logger from './logger';
+
 export default function createApp() {
   const app = express();
 
   logger.init();
-  redis.init();
 
   app.use(compression());
   app.use(morgan('dev'));

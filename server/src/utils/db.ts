@@ -4,7 +4,6 @@ import * as config from './config';
 
 const logger = log4js.getLogger('db');
 const mysqlConf = config.get('mysql');
-logger.debug('aaa', mysqlConf);
 
 const options = Object.assign(
   {

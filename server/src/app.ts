@@ -1,5 +1,6 @@
 import path from 'path';
 import * as config from './utils/config';
+
 // 加载配置
 config.load(
   path.resolve(__dirname, '../../var/server.config.json'),

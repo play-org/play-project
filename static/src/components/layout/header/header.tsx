@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import cx from 'classnames';
 import './header.less';
 
-type Tag = '/' | '/test' | '/profile';
+type Tag = '/' | '/test' | '/profile' | '/chat';
 interface IRoutesMap {
   path: Tag;
   text: string;
@@ -17,6 +17,10 @@ const routesMap: IRoutesMap[] = [
   {
     path: '/test',
     text: '测试',
+  },
+  {
+    path: '/chat',
+    text: '聊天室',
   },
   {
     path: '/profile',

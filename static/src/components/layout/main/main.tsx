@@ -5,6 +5,7 @@ import TestSvg from '../../test-svg/test-svg';
 import Profile from '../../profile/profile';
 import Home from '../../home/home';
 import Post from '../../home/post/post';
+import Chat from '../../chat/chat';
 import './main.less';
 
 export default function Main() {
@@ -16,6 +17,9 @@ export default function Main() {
         </Route>
         <Route path="/test">
           <TestSvg />
+        </Route>
+        <Route path="/chat">
+          <Chat />
         </Route>
         <Route path="/profile">
           <Profile />

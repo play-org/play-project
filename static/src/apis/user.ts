@@ -1,4 +1,4 @@
-import { post } from 'utils/request';
+import { get, post } from 'utils/request';
 /**
  * 登录
  * @param username 用户名
@@ -6,4 +6,8 @@ import { post } from 'utils/request';
  */
 export function login(username, password) {
   return post('/api/login', { username, password });
+}
+
+export function checkLogin() {
+  return get('/api/checkLogin');
 }
