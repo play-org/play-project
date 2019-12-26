@@ -9,9 +9,14 @@
     "dev:static": "cd static &&  cross-env NODE_ENV=development npm start",
     "build:static": "cd static &&  cross-env NODE_ENV=production npm run build",
     "build:server": "cd server &&  cross-env NODE_ENV=production npm run build",
-    "tslint": "cd server && npm run tslint && cd ../static && npm run tslint",
-    "lint:prettier": "prettier --list-different \"**/*.{ts,tsx,js,jsx,json,css,less,yml,yaml,md}\"",
-    "fix:prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,less,yml,yaml,md}\""
+    "fix:prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,css,less,json,yml,yaml,md,mdx}\"",
+    "fix:es": "eslint --ext .js,.ts,.jsx,.tsx ./ --cache --quiet --fix",
+    "fix:style": "stylelint \"**/*.{css,less}\" --syntax less --fix",
+    "fix": "npm run fix:prettier && npm run fix:es && npm run fix:style || exit 1",
+    "lint:prettier": "prettier --list-different \"**/*.{ts,tsx,js,jsx,css,less,json,yml,yaml,md,mdx}\"",
+    "lint:es": "eslint --ext .js,.ts,.jsx,.tsx ./ --cache --quiet",
+    "lint:style": "stylelint \"**/*.{css,less}\" --syntax less",
+    "lint": "npm run lint:prettier && npm run lint:es && npm run lint:style || exit 1"
   },
   "repository": {
     "type": "git",
@@ -25,26 +30,42 @@
   "homepage": "https://github.com/play-org/play-project#readme",
   "dependencies": {
     "cross-env": "^5.2.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "husky": "^3.0.2",
     "lint-staged": "^9.2.1",
-    "prettier": "^1.18.2",
-    "tslint": "^5.18.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-react": "^4.0.0"
+    "prettier": "^1.19.1",
+    "stylelint": "^12.0.1",
+    "stylelint-config-prettier": "^8.0.0",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^19.0.0",
+    "stylelint-order": "^3.1.1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run tslint"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "*.ts": [
-      "npm run tslint -- --fix",
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --cache --quiet --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{css,less}": [
+      "stylelint --syntax less --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,yml,yaml,md,mdx}": [
       "prettier --write",
       "git add"
     ]

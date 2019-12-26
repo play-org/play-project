@@ -1,23 +1,7 @@
 import React, { useState, CSSProperties, useReducer, useCallback } from 'react';
+import { throttle } from 'utils/index';
+
 import './test.less';
-
-const throttle = (func, delay) => {
-  var timer = null;
-  var start = Date.now();
-
-  return function(...args) {
-    clearTimeout(timer);
-    var cur = Date.now();
-    if (cur > start + delay) {
-      func.call(this, ...args);
-      start = cur;
-    } else {
-      timer = setTimeout(() => {
-        func.call(this, ...args);
-      }, delay);
-    }
-  };
-};
 
 export default function Test() {
   const initialState = {

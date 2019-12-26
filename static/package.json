@@ -5,24 +5,25 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --profile --colors --watch",
-    "build": "webpack",
-    "tslint": "tslint -p ."
+    "build": "webpack"
   },
   "author": "eago",
   "license": "ISC",
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@types/classnames": "^2.2.9",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",
     "@types/react-redux": "^7.1.4",
     "@types/react-router-dom": "^5.1.0",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/runtime": "^7.6.3",

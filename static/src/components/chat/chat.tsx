@@ -1,30 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import './chat.less';
+
+// 存储消息列表
+const initialState = [];
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'add':
+      return state.concat(action.payload);
+    default:
+      return state;
+  }
+};
+
+// page chat
 export default function Chat() {
-  let ws;
+  const [ws, setWs] = useState();
+  const [msg, setMsg] = useState('');
+  const userInfo = useSelector((state: any) => state.user);
+  const { id } = userInfo;
+  const [msgList, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => {
+    if (ws) {
+      // 打开websocket连接
+      ws.onopen = function(evt) {
+        console.log('[STATIC] Connection opened.');
+      };
+      // 接收消息
+      ws.onmessage = function(evt) {
+        const msg = evt.data;
+        dispatch({
+          type: 'add',
+          payload: JSON.parse(msg),
+        });
+      };
+      // 关闭连接
+      ws.onclose = function(evt) {
+        console.log('[STATIC] Connection closed.');
+      };
+    }
+    return () => {
+      if (ws) {
+        ws.close();
+        setWs(null);
+      }
+    };
+  }, [ws]);
+
+  // 创建websocket连接
   const createWebsocket = () => {
-    ws = new WebSocket('ws://local.wyc102989.top:3000/chat');
-    ws.onopen = function(evt) {
-      console.log('Connection open ...');
-      ws.send('Hello Websockets!');
-    };
-
-    ws.onmessage = function(evt) {
-      console.log(evt.data);
-    };
-
-    ws.onclose = function(evt) {
-      console.log('Connection closed.');
-    };
+    const ws = new WebSocket('ws://local.wyc102989.top:3000/chat');
+    setWs(ws);
   };
+
+  const handleInput = e => {
+    const msg = e.currentTarget.value;
+    setMsg(msg);
+  };
+
+  // 发送消息
   const sendMessage = () => {
-    ws.send('你好');
+    ws.send(msg);
+    setMsg('');
   };
   return (
     <div className="chat-wrap">
-      <div className="chat-msg-list">chat msg list</div>
+      <div></div>
+      <div className="chat-msg-area">
+        {msgList.length > 0 &&
+          msgList.map((item, idx) => {
+            return id == item.id ? (
+              <div key={idx} className="text-right">
+                {item.message}:{item.username}
+              </div>
+            ) : (
+              <div key={idx} className="text-left">
+                {item.username}:{item.message}
+              </div>
+            );
+          })}
+      </div>
       <button onClick={createWebsocket}>建立websocket连接</button>
-      <button onClick={sendMessage}>发送消息</button>
+      <div className="send-msg-area">
+        <input type="text" onChange={handleInput} value={msg} />
+        <button onClick={sendMessage}>发送消息</button>
+      </div>
     </div>
   );
 }
