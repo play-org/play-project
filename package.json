@@ -30,21 +30,26 @@
   "homepage": "https://github.com/play-org/play-project#readme",
   "dependencies": {
     "cross-env": "^5.2.0",
+    "ts-node": "^8.5.2",
     "typescript": "^3.7.4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.13.0",
-    "@typescript-eslint/parser": "^2.13.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.8.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.17.0",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "husky": "^3.0.2",
-    "lint-staged": "^9.2.1",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.4.3",
+    "nodemon": "^1.19.4",
     "prettier": "^1.19.1",
-    "stylelint": "^12.0.1",
-    "stylelint-config-prettier": "^8.0.0",
+    "stylelint": "^12.0.0",
+    "stylelint-config-prettier": "^6.0.0",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^19.0.0",
     "stylelint-order": "^3.1.1"
@@ -55,17 +60,15 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --cache --quiet --fix",
-      "prettier --write",
-      "git add"
-    ],
     "*.{css,less}": [
-      "stylelint --syntax less --fix",
-      "prettier --write",
+      "stylelint --fix",
       "git add"
     ],
-    "*.{json,yml,yaml,md,mdx}": [
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{css,less,js,jsx,ts,tsx,json,yml,yaml,md}": [
       "prettier --write",
       "git add"
     ]

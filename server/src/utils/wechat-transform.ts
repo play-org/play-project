@@ -38,7 +38,6 @@ export async function uploadFiles(urls: string[]) {
   // 上传静态文件
   const uploadTask: Promise<string>[] = [];
   for await (const url of urls) {
-    let p: Promise<string>;
     let ext: string;
     let filename: string;
 
@@ -49,7 +48,7 @@ export async function uploadFiles(urls: string[]) {
         callback(null, chunk);
       },
     });
-    p = new Promise((resolve, reject) => {
+    const p: Promise<string> = new Promise((resolve, reject) => {
       request
         .get(url)
         .on('response', function(res) {

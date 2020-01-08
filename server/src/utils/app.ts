@@ -14,6 +14,8 @@ export default function createApp() {
 
   logger.init();
 
+  app.set('etag', false);
+
   app.use(compression());
   app.use(morgan('dev'));
   app.use(express.json());
@@ -26,21 +28,21 @@ export default function createApp() {
   app.set('views', path.resolve('../var/static'));
   // use all middlewares，before route
   for (const middleware of middlewares) {
-    if (typeof middleware !== 'function') continue;
-    app.use(middleware);
+    if (typeof middleware === 'function') app.use(middleware);
   }
   // set routes
   for (const route in routes) {
-    const handle = (routes as Record<string, Router>)[route];
-    if (typeof handle !== 'function') continue;
-    app.use(route, handle);
+    if (Object.prototype.hasOwnProperty.call(routes, route)) {
+      const handle = (routes as Record<string, Router>)[route];
+      if (typeof handle === 'function') app.use(route, handle);
+    }
   }
   // 错误处理
   app.use(notFoundMiddleware);
   app.use(errorMiddlleware);
 
   // 跨域设置
-  app.use(function(req, res, next) {
+  app.use(function(req, res) {
     res.header('Access-Control-Allow-Origin', req.get('Origin') || '*');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header(

@@ -1,5 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
-var router = express.Router();
+import express from 'express';
 import request from 'request';
 
 import cheerio from 'cheerio';
@@ -11,6 +10,8 @@ import {
   preProcess,
   postProcess,
 } from '../utils/wechat-transform';
+
+const router = express.Router();
 
 const iPhone = puppeteer.devices['iPhone 5'];
 const puppeteerOptions: LaunchOptions = {
@@ -56,7 +57,7 @@ router.get('/', async (req, res) => {
   const $ = cheerio.load(juice(html));
 
   if (!$(weixinArticleSelector).html()) {
-    //TODO: 可以更好的异常处理
+    // TODO: 可以更好的异常处理
     throw new Error('非微信文章');
   }
   /**

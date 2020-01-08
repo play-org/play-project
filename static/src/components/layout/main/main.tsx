@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import TestSvg from '../../test-svg/test-svg';
@@ -12,7 +12,7 @@ export default function Main() {
   return (
     <main className="g-main">
       <Switch>
-        <Route exact={true} path="/">
+        <Route exact path="/">
           <Home />
         </Route>
         <Route path="/test">

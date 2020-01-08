@@ -6,36 +6,35 @@ import app from '../app';
 import createWs from '../ws';
 import sessionParser from '../middlewares/session';
 
-var debug = require('debug')('server:server');
+const debug = require('debug')('server:server');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 const wss = createWs();
 
 /**
  * upgrade protocol
  */
-server.on('upgrade', function(req, socket, head) {
-  const pathname = url.parse(req.url).pathname;
+server.on('upgrade', (req, socket, head) => {
+  const { pathname } = url.parse(req.url);
   sessionParser(req, {} as any, () => {
-    if (pathname == '/chat') {
-      wss.handleUpgrade(req, socket, head, function(ws) {
+    if (pathname === '/chat') {
+      wss.handleUpgrade(req, socket, head, ws => {
         wss.emit('connection', ws, req);
       });
     } else {
       socket.destroy();
-      return;
     }
   });
 });
@@ -52,7 +51,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val: string) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -76,16 +75,16 @@ function onError(error: any) {
     throw error;
   }
 
-  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -98,7 +97,7 @@ function onError(error: any) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr!.port;
-  debug('Listening on ' + bind);
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr!.port}`;
+  debug(`Listening on ${bind}`);
 }

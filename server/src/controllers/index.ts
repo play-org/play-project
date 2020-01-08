@@ -6,7 +6,7 @@ import * as response from '../utils/response';
 
 const logger = log4js.getLogger('session');
 // sessionLogger.level = 'debug';
-var router = express.Router();
+const router = express.Router();
 
 router.post(
   '/login',

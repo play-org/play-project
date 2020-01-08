@@ -40,13 +40,15 @@ export default function Header() {
       <ul>
         {routesMap.map(({ path, text }) => {
           return (
-            <li
-              className={cx({ active: active === path })}
-              key={path}
-              onClick={() => {
-                handleClick(path);
-              }}>
-              <Link to={path}>{text}</Link>
+            <li className={cx({ active: active === path })} key={path}>
+              <Link
+                to={path}
+                onClick={() => {
+                  handleClick(path);
+                }}
+              >
+                {text}
+              </Link>
             </li>
           );
         })}

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-let config: Record<string, any> = {};
+
+const config: Record<string, any> = {};
 
 /**
  * 加载 json
@@ -18,14 +19,16 @@ function loadJSON(filename: string) {
  */
 function mergeConf(conf1: Record<string, any>, conf2: Record<string, any>) {
   for (const key in conf2) {
-    const val = conf2[key];
-    const type = Object.prototype.toString.call(val);
-    if (type === '[object Object]') {
-      if (!conf1[key]) conf1[key] = {};
-      mergeConf(conf1[key], val);
-      continue;
+    if (Object.prototype.hasOwnProperty.call(conf2, key)) {
+      const val = conf2[key];
+      const type = Object.prototype.toString.call(val);
+      if (type === '[object Object]') {
+        if (!conf1[key]) conf1[key] = {};
+        mergeConf(conf1[key], val);
+      } else {
+        conf1[key] = val;
+      }
     }
-    conf1[key] = val;
   }
 }
 
@@ -54,7 +57,7 @@ function setInternally(conf: Record<string, any>, key: string, value: any) {
   const keys = key.split('.');
   const valKey = keys[keys.length - 1];
   let result = conf;
-  for (let i = 0; i < keys.length - 1; i++) {
+  for (let i = 0; i < keys.length - 1; i += 1) {
     result = result[keys[i]];
     if (result == null) break;
   }

@@ -9,6 +9,7 @@ config.load(
   path.resolve(__dirname, '../../config.json')
 );
 const createApp = require('./utils/app').default;
+
 const app = createApp();
 
 export default app;

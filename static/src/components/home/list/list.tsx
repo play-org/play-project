@@ -15,6 +15,7 @@ export default function List(props: ListProps) {
   const { list, total } = props.listData;
   return (
     <div className="post-list">
+      <div>{total}</div>
       {list &&
         list.map(item => {
           return (

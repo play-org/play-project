@@ -14,7 +14,7 @@ export default function Main() {
   const history = useHistory();
   useEffect(() => {
     dispatch(checkLoginAction());
-  }, []);
+  }, [dispatch]);
 
   const hanleInputUsername = e => {
     setUsername(e.currentTarget.value);
@@ -39,16 +39,20 @@ export default function Main() {
         onChange={handleInputPassword}
       />
       <button
+        type="button"
         onClick={() => {
           dispatch(loginAction(username, password));
-        }}>
+        }}
+      >
         登录
       </button>
-      <div></div>
+      <div />
       <button
+        type="button"
         onClick={() => {
           history.push('/');
-        }}>
+        }}
+      >
         回到首页
       </button>
     </section>

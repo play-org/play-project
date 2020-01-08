@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import log4js from 'log4js';
 import { ServiceError } from '../utils/error';
 import SERVICE_CODE from '../constants/service-code';
@@ -7,12 +7,7 @@ import * as response from '../utils/response';
 
 const appLogger = log4js.getLogger('app');
 
-export default function(
-  err: ServiceError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export default function(err: ServiceError, req: Request, res: Response) {
   if (!err.status) err.status = ERROR_CODE.INTERNAL_SERVER_ERROR;
   if (!err.code) err.code = SERVICE_CODE.UNKONWN + err.status;
 

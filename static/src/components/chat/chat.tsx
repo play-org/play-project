@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import './chat.less';
 
@@ -24,7 +24,7 @@ export default function Chat() {
   useEffect(() => {
     if (ws) {
       // 打开websocket连接
-      ws.onopen = function(evt) {
+      ws.onopen = function() {
         console.log('[STATIC] Connection opened.');
       };
       // 接收消息
@@ -36,7 +36,7 @@ export default function Chat() {
         });
       };
       // 关闭连接
-      ws.onclose = function(evt) {
+      ws.onclose = function() {
         console.log('[STATIC] Connection closed.');
       };
     }
@@ -66,25 +66,29 @@ export default function Chat() {
   };
   return (
     <div className="chat-wrap">
-      <div></div>
+      <div />
       <div className="chat-msg-area">
         {msgList.length > 0 &&
-          msgList.map((item, idx) => {
-            return id == item.id ? (
-              <div key={idx} className="text-right">
+          msgList.map(item => {
+            return id === item.id ? (
+              <div key={item.id} className="text-right">
                 {item.message}:{item.username}
               </div>
             ) : (
-              <div key={idx} className="text-left">
+              <div key={item.id} className="text-left">
                 {item.username}:{item.message}
               </div>
             );
           })}
       </div>
-      <button onClick={createWebsocket}>建立websocket连接</button>
+      <button type="button" onClick={createWebsocket}>
+        建立websocket连接
+      </button>
       <div className="send-msg-area">
         <input type="text" onChange={handleInput} value={msg} />
-        <button onClick={sendMessage}>发送消息</button>
+        <button type="button" onClick={sendMessage}>
+          发送消息
+        </button>
       </div>
     </div>
   );

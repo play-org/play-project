@@ -9,13 +9,15 @@ export default function Test() {
     top: 0,
   };
 
-  const [state, dispatch] = useReducer(function(state, action) {
+  const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case 'initClick':
         return {
           left: action.data.left,
           top: action.data.top,
         };
+      default:
+        return {};
     }
   }, initialState);
 
@@ -88,13 +90,16 @@ export default function Test() {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}>
+          onMouseLeave={handleMouseLeave}
+        >
           节流测试
         </div>
       </div>
       <p>1</p>
       <p>1</p>
-      <button onClick={handleCopy}>复制</button>
+      <button type="button" onClick={handleCopy}>
+        复制
+      </button>
     </main>
   );
 }

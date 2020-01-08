@@ -1,15 +1,29 @@
 {
   "compilerOptions": {
-    "target": "esnext",
     "baseUrl": ".",
     "paths": {
       "*": ["src/*"]
     },
-    // "moduleResolution": "node",
     "jsx": "react",
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "module": "esnext",
+    "target": "esnext",
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "strictPropertyInitialization": true,
+    "lib": ["dom", "es2015", "es2016", "es2017", "esnext"],
+    "noEmit": true
   },
-  "typeRoots": ["node_modules/@types", "global.d.ts"],
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }

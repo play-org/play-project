@@ -3,12 +3,12 @@ import db from '../utils/db';
 import { catchError } from '../utils/error';
 import * as response from '../utils/response';
 
-var router = express.Router();
+const router = express.Router();
 
 router
   .route('/')
   .get(
-    catchError(async (req, res, next) => {
+    catchError(async (req, res) => {
       const { pageNo, pageSize } = req.query;
       db.table('t_posts');
 
@@ -21,7 +21,7 @@ router
     })
   )
   .put(
-    catchError(async (req, res, next) => {
+    catchError(async (req, res) => {
       let data;
       if (req.body instanceof Array) {
         data = await db.table('t_posts').insert_batch(req.body);
@@ -32,7 +32,7 @@ router
     })
   )
   .post(
-    catchError(async (req, res, next) => {
+    catchError(async (req, res) => {
       const { id, ...rest } = req.body;
       const data = await db
         .table('t_posts')
@@ -42,7 +42,7 @@ router
     })
   )
   .delete(
-    catchError(async (req, res, next) => {
+    catchError(async (req, res) => {
       const { id } = req.body;
       const data = await db
         .table('t_posts')
@@ -54,8 +54,8 @@ router
 
 router.get(
   '/:id',
-  catchError(async (req, res, next) => {
-    const id = req.params.id;
+  catchError(async (req, res) => {
+    const { id } = req.params;
     // 查询帖子
     const { author_id, tags, categories, ...rest } = await db
       .select()

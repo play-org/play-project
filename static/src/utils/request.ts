@@ -4,6 +4,7 @@
  */
 import * as qs from './query-string';
 import { isString } from './check-types';
+import { getFetchError, FetchError } from './error';
 
 export type RequestMethod =
   | 'GET'
@@ -49,23 +50,31 @@ const CONTENT_TYPE = {
 };
 class Request {
   private _url;
+
   private _data;
+
   private _headers;
 
   // 方法
   private method;
+
   // 超时
   private timeout;
+
   // 强制使用 ajax
   private useAjax: boolean;
+
   // 跨域
   private cors: boolean;
+
   // 携带 cookie
   private credentials: boolean;
+
   // 超时 handler
-  private fetchTimeoutTimer: number;
+  private fetchTimeoutTimer: number | undefined;
+
   // xhr handler
-  private xhr: XMLHttpRequest;
+  private xhr: XMLHttpRequest | null | undefined;
 
   constructor(url: string, data: any, options: RequestOptions) {
     this.method = options.method || 'GET';
@@ -73,7 +82,7 @@ class Request {
     this.credentials = options.credentials || false;
     this.timeout = options.timeout || 0;
     this.cors = options.cors || false;
-    this.headers = options.headers;
+    this.headers = options.headers || {};
     this.data = data;
     this.url = this.resolveUrl(url, data);
   }
@@ -82,6 +91,7 @@ class Request {
   isQuery() {
     return ['GET', 'HEAD'].includes(this.method);
   }
+
   // 将 get, head 请求的数据拼接到 url
   resolveUrl(url: string, data: any) {
     if (this.isQuery() && data) {
@@ -139,18 +149,18 @@ class Request {
   }
 
   set headers(val: Record<string, any>) {
-    this._headers = Object.assign({ 'Content-Type': CONTENT_TYPE.JSON }, val);
+    this._headers = { 'Content-Type': CONTENT_TYPE.JSON, ...val };
     // 拿到 headers 中的 ContentType
     const contentType = this.headers['Content-Type'];
     switch (contentType) {
       case CONTENT_TYPE.JSON:
-        this._headers['Accept'] = CONTENT_TYPE.JSON;
+        this._headers.Accept = CONTENT_TYPE.JSON;
         break;
       case CONTENT_TYPE.TEXT:
-        this._headers['Accept'] = CONTENT_TYPE.TEXT;
+        this._headers.Accept = CONTENT_TYPE.TEXT;
         break;
       default:
-        this.headers['Accept'] = '*/*';
+        this.headers.Accept = '*/*';
     }
   }
 
@@ -171,7 +181,7 @@ class Request {
       cache: 'default',
     };
 
-    const tasks = [];
+    const tasks: Array<Promise<any>> = [];
     // 超时
     if (this.timeout) tasks.push(this.createFetchTimeout());
     // 模拟 abort
@@ -189,8 +199,8 @@ class Request {
     return promise;
   }
 
-  private createFetchTimeout() {
-    return new Promise((resolve, reject) => {
+  private createFetchTimeout(): Promise<FetchError> {
+    return new Promise((_resolve, reject) => {
       this.fetchTimeoutTimer = window.setTimeout(() => {
         const err = getFetchError('TIMEOUT');
         reject(err);
@@ -199,8 +209,9 @@ class Request {
   }
 
   private createFetchAbort() {
-    let abort: () => void;
-    const abortPromise = new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    let abort: () => void = () => {};
+    const abortPromise = new Promise((_resolve, reject) => {
       abort = () => {
         const err = getFetchError('ABORT');
         reject(err);
@@ -211,10 +222,11 @@ class Request {
 
   private onFetchLoad(res: Response) {
     this.finallyFetch();
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
-      const status = res.status;
-      const result = await this.parseFetchData(res);
+      const { status } = res;
 
+      const result = await this.parseFetchData(res);
       if ((status < 200 || status > 300) && status !== 304) {
         const err = getFetchError('ERROR');
         reject(err);
@@ -238,7 +250,7 @@ class Request {
 
   private parseFetchData(res: Response) {
     let result;
-    switch (this.headers['Accept']) {
+    switch (this.headers.Accept) {
       case CONTENT_TYPE.JSON:
         result = res.json();
         break;
@@ -259,7 +271,9 @@ class Request {
     xhr.open(this.method, this.url);
 
     for (const name in this.headers) {
-      xhr.setRequestHeader(name, this.headers[name]);
+      if (Object.prototype.hasOwnProperty.call(this.headers, name)) {
+        xhr.setRequestHeader(name, this.headers[name]);
+      }
     }
 
     // 包装 Promise 异步模式
@@ -283,22 +297,23 @@ class Request {
 
     return promise;
   }
+
   private onXHRLoad(
     resolve: (value?: any) => void,
     reject: (reason?: any) => void
   ) {
     return () => {
       if (!this.xhr) return;
-      const xhr = this.xhr;
+      const { xhr } = this;
       if (xhr.readyState === 4) {
         this.finallyXHR();
 
         let result: any = xhr.responseText || '';
-        if (this.headers['Accept'] === CONTENT_TYPE.JSON) {
+        if (this.headers.Accept === CONTENT_TYPE.JSON) {
           result = result ? JSON.parse(result) : {};
         }
 
-        const status = xhr.status;
+        const { status } = xhr;
         // <200 || >=300 异常 http status，抛出错误
         if (status < 200 || (status >= 300 && status !== 304)) {
           const err = getFetchError('ERROR');
@@ -338,13 +353,12 @@ class Request {
   private finallyXHR() {
     if (!this.xhr) return;
     // 释放 xhr
-    this.xhr.ontimeout = this.xhr.onload = this.xhr.onerror = this.xhr.onabort = null;
     this.xhr = null;
   }
 
   parseResponse(result) {
-    if (this.headers['Accept'] === CONTENT_TYPE.JSON) {
-      if (result.hasOwnProperty('success')) {
+    if (this.headers.Accept === CONTENT_TYPE.JSON) {
+      if (Object.prototype.hasOwnProperty.call(result, 'success')) {
         return result.data;
       }
     }
@@ -397,60 +411,6 @@ function del(url: string, data?: any, options: RequestOptions = {}) {
 function options(url: string, options: RequestOptions = {}) {
   options.method = 'OPTIONS';
   return request(url, null, options);
-}
-
-const REQUEST_STATUS = {
-  SUCCESS: 200,
-  MULTIPLE_CHOICES: 300,
-  NOT_MODIFY: 304,
-  ABORT: 400,
-  ERROR: 500,
-  TIMEOUT: 504,
-};
-
-const REQUEST_CODE = {
-  SUCCESS: 200,
-  ABORT: 1000,
-  TIMEOUT: 1001,
-  ERROR: 1002,
-};
-
-const REQUEST_MSG = {
-  TIMEOUT: '请求超时',
-  ERROR: '未知错误',
-  ABORT: '请求被取消',
-};
-
-/**
- * FetchError类
- */
-export class FetchError extends Error {
-  private status: number = REQUEST_STATUS.SUCCESS;
-  private code: string | number = REQUEST_CODE.SUCCESS;
-  stack: string | null = null;
-  constructor(
-    code: string | number,
-    status: number,
-    msg: string,
-    stack?: string | null
-  ) {
-    super(msg);
-    this.code = code;
-    this.status = status;
-    if (stack) this.stack = stack;
-  }
-}
-
-/**
- * 获取Error对象
- * @param type error类型
- */
-function getFetchError(type: 'ERROR' | 'TIMEOUT' | 'ABORT') {
-  return new FetchError(
-    REQUEST_CODE[type],
-    REQUEST_STATUS[type],
-    REQUEST_MSG[type]
-  );
 }
 
 export { get, head, options, post, put, patch, del };

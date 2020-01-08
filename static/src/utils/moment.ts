@@ -16,19 +16,22 @@ export function formatDate(val: number | string | Date, fmt?: string) {
     d: date.getDate(), // 日期
     w: date.getDay(), // 星期，注意是0-6
     H: date.getHours(), // 24小时制
-    h: date.getHours() % 12 == 0 ? 12 : date.getHours() % 12, // 12小时制
+    h: date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 12小时制
     m: date.getMinutes(), // 分钟
     s: date.getSeconds(), // 秒
     S: date.getMilliseconds(), // 毫秒
   };
   for (const i in obj) {
-    fmt = fmt.replace(new RegExp(i + '+', 'g'), function(m) {
-      let val = obj[i] + '';
-      for (let j = 0, len = val.length; j < m.length - len; j++)
-        val = '0' + val;
-      return m.length == 1 ? val : val.substring(val.length - m.length);
-    });
+    if (Object.prototype.hasOwnProperty.call(obj, i)) {
+      fmt = fmt.replace(new RegExp(`${i}+`, 'g'), m => {
+        let val = `${obj[i]}`;
+        for (let j = 0, len = val.length; j < m.length - len; j += 1)
+          val = `0${val}`;
+        return m.length === 1 ? val : val.substring(val.length - m.length);
+      });
+    }
   }
+
   return fmt;
 }
 
@@ -40,7 +43,7 @@ export type counterType = 0 | 1 | 2;
  * @param remainTimeStamp 剩余时间戳
  */
 function transformCountDownStr(remainTimeStamp: number) {
-  remainTimeStamp = remainTimeStamp / 1000;
+  remainTimeStamp /= 1000;
   const day = Math.floor(remainTimeStamp / 3600 / 24);
   const hour = Math.floor((remainTimeStamp % (3600 * 24)) / 3600);
   const minute = Math.floor(((remainTimeStamp % (3600 * 24)) % 3600) / 60);
@@ -92,7 +95,7 @@ export function calCountDown(
   // 倒计时函数
   function countDown() {
     // 计数+1
-    count++;
+    count += 1;
     // 时间误差偏移
     const offset = new Date().getTime() - (clientTimeStamp + count * interval);
     // 下次触发setTimeout的时间间隔
@@ -101,23 +104,23 @@ export function calCountDown(
     if (nextTime < 0) nextTime = 0;
     // 核心逻辑
     if (remainTimeStamp > 0) {
-      remainTimeStamp = remainTimeStamp - interval;
+      remainTimeStamp -= interval;
       countDownStrCallback(
         `${transformCountDownStr(remainTimeStamp)}${
-          type == 0 ? '后开始' : '后结束'
+          type === 0 ? '后开始' : '后结束'
         }`
       );
       // console.log(`${remainTimeStamp}${type == 0 ? '后开始' : '后结束'}`);
       timer = setTimeout(countDown, nextTime);
     } else {
       // 如果剩余时间戳<=0，判断状态改变
-      if (type == 0) {
+      if (type === 0) {
         remainTimeStamp = limitEndTimeStamp - limitStartTimeStamp;
         type = 1;
         timer = setTimeout(countDown, nextTime);
       } else {
         type = 2;
-        countDownStrCallback(`已结束`);
+        countDownStrCallback('已结束');
       }
       countDownTypeCallback && countDownTypeCallback(type);
     }

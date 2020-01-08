@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPost } from 'apis/post';
-import moment from 'utils/moment';
+import * as moment from 'utils/moment';
 import './post.less';
-import { spawn } from 'child_process';
 
 interface IPost {
   id: number;
@@ -34,13 +33,13 @@ export default function Post() {
   // 请求帖子数据
   useEffect(() => {
     async function fetchPost() {
-      const data = await getPost(parseInt(id));
+      const data = await getPost(Number(id));
       setPost(data);
     }
     fetchPost();
-  }, []);
+  }, [id]);
 
-  //渲染作者信息
+  // 渲染作者信息
   const renderAuthor = () => (
     <div className="author-wrapper">
       <img className="avatar" src={post.avatar} alt="" />
@@ -48,7 +47,7 @@ export default function Post() {
         <div className="author-name">{post.username}</div>
         <div className="extra-info">
           <span style={{ marginRight: '10px' }}>
-            {post.create_time && moment(post.create_time)}
+            {post.create_time && moment.formatDate(post.create_time)}
           </span>
           <span>阅读 {post.read_num}</span>
         </div>

@@ -1,17 +1,35 @@
-import path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import InlineManifestWebpackPlugin from 'inline-manifest-webpack-plugin';
-import varConfig from '../var/static.config.json';
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin');
+const varConfig = require('../var/static.config.json');
 
 function resolve(p) {
   return path.resolve(__dirname, p);
 }
 const isDev = process.env.NODE_ENV === 'development';
 
+const pluginArr = isDev
+  ? []
+  : [
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash:10].css',
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorOptions: {
+          map: {
+            // 不生成内联映射,这样配置就会生成一个source-map文件
+            inline: false,
+            // 向css文件添加source-map路径注释
+            // 如果没有此项压缩后的css会去除source-map路径注释
+            annotation: true,
+          },
+        },
+      }), // 压缩css÷
+    ];
 module.exports = {
   mode: isDev ? 'development' : 'production',
   entry: {
@@ -140,24 +158,5 @@ module.exports = {
       outputPath: varConfig.distDir,
     }),
     new InlineManifestWebpackPlugin('manifest'),
-  ].concat(
-    isDev
-      ? []
-      : [
-          new MiniCssExtractPlugin({
-            filename: `[name].[contenthash:10].css`,
-          }),
-          new OptimizeCSSAssetsPlugin({
-            cssProcessorOptions: {
-              map: {
-                // 不生成内联映射,这样配置就会生成一个source-map文件
-                inline: false,
-                // 向css文件添加source-map路径注释
-                // 如果没有此项压缩后的css会去除source-map路径注释
-                annotation: true,
-              },
-            },
-          }), //压缩css÷
-        ]
-  ),
+  ].concat(pluginArr),
 };

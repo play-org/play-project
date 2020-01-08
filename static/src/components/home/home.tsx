@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPostList } from 'apis/post';
 import List, { IPostList } from './list/list';
+import Test from './test/test';
 
 export default function Home() {
   const [postList, setPostList] = useState<IPostList>({});
@@ -16,6 +17,7 @@ export default function Home() {
   }, []);
   return (
     <section>
+      <Test />
       <List listData={postList} />
     </section>
   );

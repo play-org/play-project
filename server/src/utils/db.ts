@@ -5,31 +5,33 @@ import * as config from './config';
 const logger = log4js.getLogger('db');
 const mysqlConf = config.get('mysql');
 
-const options = Object.assign(
-  {
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    database: 'mysql',
-    connectionLimit: 10,
-  },
-  mysqlConf
-);
+const options = {
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'root',
+  database: 'mysql',
+  connectionLimit: 10,
+  ...mysqlConf,
+};
 
 const pool = mysql.createPool(options);
 
 class DB {
   tableName: string;
+
   sqlObj: Record<string, any>;
+
   constructor() {
     this.tableName = '';
     this.sqlObj = {};
   }
+
   table(table: string) {
     // this.sqlObj = {};
     this.tableName = table;
     return this;
   }
+
   // 搜索
   /**
    * where
@@ -47,6 +49,7 @@ class DB {
     }
     return this;
   }
+
   // or_where
   or_where(data: Record<string, any>) {
     if (data) {
@@ -60,52 +63,62 @@ class DB {
     }
     return this;
   }
+
   // where_in
   where_in(field: string, data: any[]) {
     this._where_in_common(field, data);
     return this;
   }
+
   // or_where_in
   or_where_in(field: string, data: any[]) {
     this._where_in_common(field, data, 'or');
     return this;
   }
+
   // where_not_in
   where_not_in(field: string, data: any[]) {
     this._where_in_common(field, data, 'and', 'not');
     return this;
   }
+
   // or_where_not_in
   or_where_not_in(field: string, data: any[]) {
     this._where_in_common(field, data, 'or', 'not');
     return this;
   }
+
   // 模糊搜索
   // like
   like(field: string | Record<string, any>, str?: string) {
     this._like_common(field, str);
     return this;
   }
+
   // or_like
   or_like(field: string | Record<string, any>, str?: string) {
     this._like_common(field, str, 'or');
     return this;
   }
+
   // not_like
   not_like(field: string | Record<string, any>, str?: string) {
     this._like_common(field, str, 'and', 'not');
     return this;
   }
+
   // or_not_like
   or_not_like(field: string | Record<string, any>, str?: string) {
     this._like_common(field, str, 'or', 'not');
     return this;
   }
+
   // group by
   group_by(data: string | string[]) {
     this.sqlObj.groupBy = pool.escape(data);
     return this;
   }
+
   // having
   having(data: string[]) {
     const strHaving = pool.escape(data).replace(',', 'and');
@@ -116,6 +129,7 @@ class DB {
     }
     return this;
   }
+
   // or_having
   or_having(data: string[]) {
     const strHaving = pool.escape(data).replace(',', 'or');
@@ -126,6 +140,7 @@ class DB {
     }
     return this;
   }
+
   /**
    * limit查询
    * @param num 条数
@@ -135,14 +150,16 @@ class DB {
     this.sqlObj.limit = offset ? ` limit ${offset},${num}` : ` limit ${num}`;
     return this;
   }
-  page(pageNo: number = 1, pageSize: number = 10) {
+
+  page(pageNo = 1, pageSize = 10) {
     return this.limit(pageSize, (pageNo - 1) * pageSize);
   }
+
   /**
    * 查询记录总数
    * @param isClear 是否清楚缓存，默认true
    */
-  async count_all_results(isClear: boolean = true) {
+  async count_all_results(isClear = true) {
     const sql = this._addExtra(
       `select count(*) as total from ${this.tableName}`
     );
@@ -150,11 +167,13 @@ class DB {
     isClear && this._clearSqlObj();
     try {
       const res = (await this.query(sql)) as Array<Record<string, any>>;
-      return res[0]['total'];
+      return res[0].total;
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
+
   /**
    * 排序
    * @param field 字段
@@ -177,6 +196,7 @@ class DB {
     this.sqlObj.fields = fields || ['*'];
     return this;
   }
+
   async findOne() {
     const sql = this._addExtra(
       `select ${this.sqlObj.fields.join(',')} from ${this.tableName}`
@@ -184,14 +204,10 @@ class DB {
     logger.debug('sql:', sql);
     // 清除缓存
     this._clearSqlObj();
-    try {
-      const result = await this.query(sql);
+    const result = await this.query(sql);
 
-      logger.debug('sql result', result);
-      return result[0];
-    } catch (e) {
-      throw e;
-    }
+    logger.debug('sql result', result);
+    return result[0];
   }
 
   async findAll() {
@@ -201,14 +217,11 @@ class DB {
     logger.debug('sql:', sql);
     // 清除缓存
     this._clearSqlObj();
-    try {
-      const result = await this.query(sql);
-      logger.debug('sql result', result);
-      return result;
-    } catch (e) {
-      throw e;
-    }
+    const result = await this.query(sql);
+    logger.debug('sql result', result);
+    return result;
   }
+
   /**
    * 插入
    * @param data 数据
@@ -229,6 +242,7 @@ class DB {
         throw e;
       });
   }
+
   /**
    * 批量插入
    * @param data 数据
@@ -253,6 +267,7 @@ class DB {
         throw e;
       });
   }
+
   /**
    * 更新
    * @param data 数据
@@ -269,6 +284,7 @@ class DB {
         throw e;
       });
   }
+
   /**
    * 删除操作
    */
@@ -284,13 +300,14 @@ class DB {
         throw e;
       });
   }
+
   /**
    * 查询方法
    * @param sql string
    */
   query(sql: string): Promise<any[]> {
-    return new Promise(function(resolve, reject) {
-      pool.query(sql, function(err, res, rows) {
+    return new Promise((resolve, reject) => {
+      pool.query(sql, (err, res) => {
         if (err) {
           // 异步处理
           reject(err);
@@ -301,12 +318,13 @@ class DB {
       });
     });
   }
+
   /**
    * 拼接sql其他子句
    * @param str string
    */
   private _addExtra(str: string) {
-    const sqlObj = this.sqlObj;
+    const { sqlObj } = this;
     if (sqlObj.where) {
       str += ` where ${sqlObj.where}`;
     }
@@ -324,10 +342,12 @@ class DB {
     }
     return str;
   }
+
   // 清除sqlObj缓存
   private _clearSqlObj() {
     this.sqlObj = {};
   }
+
   // like common
   private _like_common(
     field: string | Record<string, any>,
@@ -354,6 +374,7 @@ class DB {
       this.sqlObj.where = strWhere;
     }
   }
+
   private _where_in_common(
     field: string,
     data: any[],
