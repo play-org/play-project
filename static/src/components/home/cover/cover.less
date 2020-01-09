@@ -1,0 +1,32 @@
+.cover {
+  display: grid;
+  grid-gap: 4px;
+  grid-template-areas:
+    'a a b'
+    'a a b'
+    'c c d';
+  grid-template-rows: [r1] 100px [r2] 100px [r3] 100px [r4];
+  grid-template-columns: [c1] 100px [c2] 100px [c3] 100px [c4];
+  div {
+    position: relative;
+    overflow: hidden;
+    img {
+      position: absolute;
+      left: 50%;
+      height: 100%;
+      transform: translateX(-50%);
+    }
+  }
+  div:nth-child(1) {
+    grid-area: a;
+  }
+  div:nth-child(2) {
+    grid-area: b;
+  }
+  div:nth-child(3) {
+    grid-area: c;
+  }
+  div:nth-child(4) {
+    grid-area: d;
+  }
+}

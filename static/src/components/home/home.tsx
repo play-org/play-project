@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPostList } from 'apis/post';
 import List, { IPostList } from './list/list';
-import Test from './test/test';
+import Cover from './cover/cover';
 
 export default function Home() {
   const [postList, setPostList] = useState<IPostList>({});
@@ -17,7 +17,7 @@ export default function Home() {
   }, []);
   return (
     <section>
-      <Test />
+      <Cover />
       <List listData={postList} />
     </section>
   );

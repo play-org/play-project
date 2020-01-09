@@ -86,7 +86,7 @@ module.exports = {
       // 处理图片（css background图片、imgs require图片）
       // 小于10k的图片，将会被转成base64 code
       {
-        test: /\.(jpg|png|gif|svg)$/i,
+        test: /\.(jpg|png|gif|svg|jpeg)$/i,
         use: [
           {
             loader: 'url-loader',
