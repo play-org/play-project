@@ -6,9 +6,10 @@ import {
   checkLogin as checkLoginAction,
 } from 'actions/user';
 
-import Modal from '../../../ui/components/modal/modal';
-import Button from '../../../ui/components/button/button';
+// import Modal from '../../../ui/components/Modal/Modal';
+import Button from '../../../ui/components/Button/Button';
 
+// import videoSrc from './introduce.mp4';
 import './profile.less';
 
 export default function Main() {
@@ -18,6 +19,7 @@ export default function Main() {
   const userInfo = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const history = useHistory();
+  console.log(visible);
   useEffect(() => {
     dispatch(checkLoginAction());
   }, [dispatch]);
@@ -40,7 +42,10 @@ export default function Main() {
       >
         打开弹窗
       </Button>
-
+      {/* <video controls>
+        <track kind="subtitles" src="foo.en.vtt" label="English" />
+        <source src={videoSrc} />
+      </video> */}
       <div>{userInfo && userInfo.username}</div>
 
       <input
@@ -84,10 +89,17 @@ export default function Main() {
       <Button type="link" href="http://www.baidu.com">
         按钮
       </Button>
+      <Button type="success" shape="circle">
+        1
+      </Button>
+      <Button type="success" shape="round">
+        1
+      </Button>
 
-      <Modal visible={visible}>
-        <>nihao</>
-      </Modal>
+      {/* <Modal visible={visible}>
+        <Modal.Body>body</Modal.Body>
+        <Modal.Footer>footer</Modal.Footer>
+      </Modal> */}
     </section>
   );
 }

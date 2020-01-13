@@ -1,9 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import TestSvg from '../../test-svg/test-svg';
+// import TestSvg from '../../test-svg/test-svg';
 import Profile from '../../profile/profile';
 import Home from '../../home/home';
+import Editor from '../../editor/editor';
 import Post from '../../home/post/post';
 import Chat from '../../chat/chat';
 import './main.less';
@@ -15,8 +16,8 @@ export default function Main() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/test">
-          <TestSvg />
+        <Route path="/editor">
+          <Editor />
         </Route>
         <Route path="/chat">
           <Chat />

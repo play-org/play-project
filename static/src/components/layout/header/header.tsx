@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import cx from 'classnames';
 import './header.less';
 
-type Tag = '/' | '/test' | '/profile' | '/chat';
+type Tag = '/' | '/editor' | '/profile' | '/chat';
 interface IRoutesMap {
   path: Tag;
   text: string;
@@ -15,8 +15,8 @@ const routesMap: IRoutesMap[] = [
     text: '首页',
   },
   {
-    path: '/test',
-    text: '测试',
+    path: '/editor',
+    text: '编辑器',
   },
   {
     path: '/chat',

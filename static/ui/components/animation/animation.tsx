@@ -1,5 +1,5 @@
-import React, { ReactElement, useRef } from 'react';
 import cx from 'classnames';
+import React, { ReactElement, useRef } from 'react';
 import * as component from '../../component';
 import useAnimation from '../../hooks/animation';
 

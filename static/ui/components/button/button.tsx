@@ -1,40 +1,84 @@
 import React from 'react';
 import * as component from '../../component';
 
-import './button.less';
+import './Button.less';
 
-type ButtonType =
-  | 'default'
+export type ButtonType =
   | 'primary'
   | 'success'
+  | 'warning'
   | 'danger'
   | 'text'
   | 'link';
-type ButtonShape = '' | 'circle' | 'round';
-type ButtonSize = 'normal' | 'small' | 'large';
+export type ButtonShape = 'square' | 'circle' | 'round';
 
-interface BaseButtonProps {
-  type?: ButtonType;
+interface BaseButtonProps
+  extends component.BaseComponent,
+    component.DisabledComponent,
+    component.SizedComponent,
+    component.NestedComponent,
+    Omit<component.IconableComponent, 'iconSpin' | 'onIconClick'> {
+  /**
+   * 按钮形状
+   * @default square
+   */
   shape?: ButtonShape;
-  size?: ButtonSize;
+  /**
+   * 是否是加载中状态
+   * @default false
+   */
   loading?: boolean;
-  icon?: string;
-  children?: React.ReactNode;
+
+  /**
+   * 按钮类型：
+   * - `primary` - 主按钮，在同一个操作区域中，应当只有一个主按钮
+   * - `success` - 成功按钮
+   * - `warning` - 警告按钮
+   * - `danger` - 危险按钮
+   * - `text` - 文本式按钮
+   * - `link` - 链接式按钮
+   */
+  type?: ButtonType;
 }
 
-interface NativeButtonProps extends BaseButtonProps {
-  htmlType?: 'submit' | 'reset' | 'button';
-  onClick: () => void;
+export interface NativeButtonProps
+  extends BaseButtonProps,
+    component.MouseEventComponent<HTMLButtonElement> {
+  /**
+   * 设置`button`原生的`type`值:
+   * - `button` - 普通按钮，默认
+   * - `submit` - 提交按钮
+   * - `reset` - 重置按钮
+   * @default 'button'
+   */
+  htmlType?: 'button' | 'submit' | 'reset';
 }
 
-interface LinkButtonProps extends BaseButtonProps {
+export interface LinkButtonProps
+  extends BaseButtonProps,
+    component.MouseEventComponent<HTMLAnchorElement> {
+  /**
+   * 点击按钮跳转的链接，指定此属性后的行为将和`<a>`链接一致
+   */
   href?: string;
+
+  /**
+   * 相当于`<a>`链接的`target`属性，仅在指定`href`属性后生效
+   */
   target?: string;
-  rel?: string;
+
+  /**
+   * 下载链接，相当于`<a>`链接的`download`属性，仅在指定`href`属性后生效
+   */
   download?: string;
+
+  /**
+   * 链接关系，相当于`<a>`链接的`rel`属性，仅在指定`href`属性后生效
+   */
+  rel?: string;
 }
 
-type ButtonProps = NativeButtonProps | LinkButtonProps;
+export type ButtonProps = NativeButtonProps | LinkButtonProps;
 
 function getClasses(props: BaseButtonProps) {
   const type = 'btn';
@@ -79,7 +123,7 @@ function LinkButton(props: LinkButtonProps) {
 }
 
 const defaultProps: Partial<ButtonProps> = {
-  shape: '',
+  shape: 'square',
   size: 'normal',
   target: '_blank',
   loading: false,

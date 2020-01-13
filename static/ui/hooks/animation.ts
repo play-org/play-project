@@ -10,3 +10,6 @@
 
 //   return animation;
 // }
+export function aniamtion() {
+  console.log(1);
+}
