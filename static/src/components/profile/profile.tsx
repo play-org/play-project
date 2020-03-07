@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { Button } from 'antd';
 import {
   login as loginAction,
   checkLogin as checkLoginAction,
 } from 'actions/user';
-
-// import Modal from '../../../ui/components/Modal/Modal';
-import Button from '../../../ui/components/Button/Button';
-
-// import videoSrc from './introduce.mp4';
 import './profile.less';
 
 export default function Main() {
@@ -42,10 +38,6 @@ export default function Main() {
       >
         打开弹窗
       </Button>
-      {/* <video controls>
-        <track kind="subtitles" src="foo.en.vtt" label="English" />
-        <source src={videoSrc} />
-      </video> */}
       <div>{userInfo && userInfo.username}</div>
 
       <input
@@ -75,31 +67,6 @@ export default function Main() {
       >
         回到首页
       </button>
-      <Button>按钮</Button>
-      <Button type="primary">按钮</Button>
-      <Button type="primary" size="large">
-        按钮
-      </Button>
-      <Button type="primary" size="small">
-        按钮
-      </Button>
-      <Button type="danger">按钮</Button>
-      <Button type="success">按钮</Button>
-      <Button type="text">按钮</Button>
-      <Button type="link" href="http://www.baidu.com">
-        按钮
-      </Button>
-      <Button type="success" shape="circle">
-        1
-      </Button>
-      <Button type="success" shape="round">
-        1
-      </Button>
-
-      {/* <Modal visible={visible}>
-        <Modal.Body>body</Modal.Body>
-        <Modal.Footer>footer</Modal.Footer>
-      </Modal> */}
     </section>
   );
 }

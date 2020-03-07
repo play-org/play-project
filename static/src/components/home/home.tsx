@@ -3,6 +3,8 @@ import { getPostList } from 'apis/post';
 import List, { IPostList } from './list/list';
 import Cover from './cover/cover';
 
+import './home.less';
+
 export default function Home() {
   const [postList, setPostList] = useState<IPostList>({});
   useEffect(() => {
@@ -15,6 +17,7 @@ export default function Home() {
       setPostList({});
     };
   }, []);
+
   return (
     <section>
       <Cover />
