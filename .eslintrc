@@ -4,25 +4,25 @@
     "node": true,
     "es6": true
   },
-  "extends": [
-    "eslint-config-airbnb",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
-  ],
   "globals": {},
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2018,
+    "ecmaVersion": 7,
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "prettier", "react-hooks"],
+
+  "extends": [
+    "eslint-config-airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
   "rules": {
     "prettier/prettier": "error",
-    // "indent": ["error", 2, { "SwitchCase": 1 }],
     "global-require": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "single"],

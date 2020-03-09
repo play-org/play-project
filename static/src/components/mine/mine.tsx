@@ -6,9 +6,9 @@ import {
   login as loginAction,
   checkLogin as checkLoginAction,
 } from 'actions/user';
-import './profile.less';
+import './mine.less';
 
-export default function Main() {
+export default function Mine() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState<boolean>(false);

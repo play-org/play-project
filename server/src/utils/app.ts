@@ -14,35 +14,37 @@ export default function createApp() {
 
   logger.init();
 
+  // 全部禁用etag
   app.set('etag', false);
 
+  // 压缩返回文件gzip
   app.use(compression());
   app.use(morgan('dev'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  app.use(express.static(path.join(__dirname, '../../var/static')));
+  // 设置ejs模板及静态资源目录
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.set('views', path.resolve('../var/static'));
-  // use all middlewares，before route
+  app.use(express.static(path.join(__dirname, '../../var/static')));
+
+  // 在路由之前，调用中间件
   for (const middleware of middlewares) {
     if (typeof middleware === 'function') app.use(middleware);
   }
-  // set routes
+
+  // 设置路由
   for (const route in routes) {
     if (Object.prototype.hasOwnProperty.call(routes, route)) {
       const handle = (routes as Record<string, Router>)[route];
       if (typeof handle === 'function') app.use(route, handle);
     }
   }
-  // 错误处理
-  app.use(notFoundMiddleware);
-  app.use(errorMiddlleware);
 
   // 跨域设置
-  app.use(function(req, res) {
+  app.use((req, res) => {
     res.header('Access-Control-Allow-Origin', req.get('Origin') || '*');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header(
@@ -55,5 +57,10 @@ export default function createApp() {
       'Accept, Authorization, Content-Type, X-Requested-With, Range'
     );
   });
+  // 404错误
+  app.use(notFoundMiddleware);
+  // 兜底错误
+  app.use(errorMiddlleware);
+
   return app;
 }
