@@ -28,7 +28,7 @@ export default function createApp() {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.set('views', path.resolve('../var/static'));
-  app.use(express.static(path.join(__dirname, '../../var/static')));
+  app.use(express.static(path.resolve('../var/static')));
 
   // 在路由之前，调用中间件
   for (const middleware of middlewares) {
